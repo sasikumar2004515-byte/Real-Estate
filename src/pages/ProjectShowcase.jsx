@@ -48,6 +48,7 @@ function ProjectShowcase() {
 
   const [activeImage, setActiveImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [planZoom, setPlanZoom] = useState(null)
   const [planType, setPlanType] = useState('floor')
   const [floorPlan, setFloorPlan] = useState(0)
   const [formStatus, setFormStatus] = useState('idle')
@@ -145,6 +146,22 @@ function ProjectShowcase() {
   }
 
   const [formMessage, setFormMessage] = useState('')
+
+  useEffect(() => {
+    if (!planZoom) return undefined
+
+    const onKey = (event) => {
+      if (event.key === 'Escape') setPlanZoom(null)
+    }
+
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [planZoom])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -357,7 +374,7 @@ function ProjectShowcase() {
                 </p>
 
                 <h2>
-                  A residence
+                  A residence{' '}
                   <span>
                     designed around you.
                   </span>
@@ -432,7 +449,7 @@ function ProjectShowcase() {
                 </p>
 
                 <h2>
-                  See the
+                  See the{' '}
                   <span>possibility.</span>
                 </h2>
               </div>
@@ -526,7 +543,7 @@ function ProjectShowcase() {
                 </p>
 
                 <h2>
-                  Details that
+                  Details that{' '}
                   <span>make a difference.</span>
                 </h2>
 
@@ -603,7 +620,7 @@ function ProjectShowcase() {
                 </p>
 
                 <h2>
-                  Designed for
+                  Designed for{' '}
                   <span>everyday life.</span>
                 </h2>
 
@@ -635,7 +652,7 @@ function ProjectShowcase() {
               </p>
 
               <h2>
-                Understand the
+                Understand the{' '}
                 <span>space.</span>
               </h2>
 
@@ -692,25 +709,30 @@ function ProjectShowcase() {
 
                     </div>
 
-                    <div className="plan-visual floor-plan-visual">
+                    <button
+                      type="button"
+                      className="plan-image-button"
+                      onClick={() =>
+                        setPlanZoom({
+                          src: '/images/projects/floor-plan.webp',
+                          alt: 'Illustrative 3 BHK floor plan',
+                        })
+                      }
+                      aria-label="Enlarge floor plan"
+                    >
+                      <img
+                        src="/images/projects/floor-plan.webp"
+                        alt="Illustrative 3 BHK floor plan with room dimensions"
+                        loading="lazy"
+                        width="1920"
+                        height="1072"
+                      />
+                      <span className="plan-image-hint">Click to enlarge</span>
+                    </button>
 
-                      <div className="plan-room room-one">
-                        LIVING
-                      </div>
-
-                      <div className="plan-room room-two">
-                        BEDROOM
-                      </div>
-
-                      <div className="plan-room room-three">
-                        DINING
-                      </div>
-
-                      <div className="plan-room room-four">
-                        KITCHEN
-                      </div>
-
-                    </div>
+                    <p className="plan-image-note">
+                      Illustrative layout. Final approved plans are shared during enquiry.
+                    </p>
 
                   </article>
 
@@ -799,19 +821,30 @@ function ProjectShowcase() {
 
                   </div>
 
-                  <div className="master-plan-visual">
+                  <button
+                    type="button"
+                    className="plan-image-button"
+                    onClick={() =>
+                      setPlanZoom({
+                        src: '/images/projects/master-plan.webp',
+                        alt: 'Illustrative community master plan',
+                      })
+                    }
+                    aria-label="Enlarge master plan"
+                  >
+                    <img
+                      src="/images/projects/master-plan.webp"
+                      alt="Illustrative community master plan with amenities and key"
+                      loading="lazy"
+                      width="1920"
+                      height="1072"
+                    />
+                    <span className="plan-image-hint">Click to enlarge</span>
+                  </button>
 
-                    <div className="master-road master-road-horizontal" />
-
-                    <div className="master-road master-road-vertical" />
-
-                    <div className="master-green master-green-one" />
-
-                    <div className="master-green master-green-two" />
-
-                    <div className="master-pin" />
-
-                  </div>
+                  <p className="plan-image-note">
+                    Illustrative master plan. Layout and amenities are subject to final approvals.
+                  </p>
 
                 </article>
               )}
@@ -837,7 +870,7 @@ function ProjectShowcase() {
               </p>
 
               <h2>
-                Connected to
+                Connected to{' '}
                 <span>what matters.</span>
               </h2>
 
@@ -940,7 +973,7 @@ function ProjectShowcase() {
                   </p>
 
                   <h2>
-                    Explore similar
+                    Explore similar{' '}
                     <span>projects.</span>
                   </h2>
                 </div>
@@ -1014,7 +1047,7 @@ function ProjectShowcase() {
               </p>
 
               <h2>
-                Let's find your
+                Let's find your{' '}
                 <span>next address.</span>
               </h2>
 
@@ -1184,6 +1217,26 @@ function ProjectShowcase() {
       </main>
 
       <Footer />
+
+      {planZoom && (
+        <div
+          className="plan-zoom"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Enlarged plan"
+          onClick={() => setPlanZoom(null)}
+        >
+          <button
+            type="button"
+            className="plan-zoom-close"
+            aria-label="Close enlarged plan"
+            onClick={() => setPlanZoom(null)}
+          >
+            ×
+          </button>
+          <img src={planZoom.src} alt={planZoom.alt} onClick={(event) => event.stopPropagation()} />
+        </div>
+      )}
 
       {/* Lightbox */}
 

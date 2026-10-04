@@ -55,7 +55,7 @@ function FAQ() {
             <p className="section-eyebrow">FREQUENTLY ASKED</p>
 
             <h1>
-              Questions,
+              Questions,{' '}
               <span>answered clearly.</span>
             </h1>
 
@@ -80,7 +80,7 @@ function FAQ() {
                 <p className="section-eyebrow">CATEGORIES</p>
 
                 <h2>
-                  Find what
+                  Find what{' '}
                   <span>you need.</span>
                 </h2>
 
@@ -230,7 +230,7 @@ function FAQ() {
                 </p>
 
                 <h2>
-                  Some questions
+                  Some questions{' '}
                   <span>need a conversation.</span>
                 </h2>
 
@@ -285,7 +285,7 @@ function FAQ() {
             <p className="section-eyebrow">READY TO EXPLORE?</p>
 
             <h2>
-              Your questions are answered.
+              Your questions are answered.{' '}
               <span>Now discover your next home.</span>
             </h2>
 

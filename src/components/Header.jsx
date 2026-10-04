@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { Search } from 'lucide-react'
 import { navigation, site } from '../data/site'
+import SearchOverlay from './SearchOverlay'
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,6 +29,25 @@ function Header() {
       document.body.style.overflow = ''
     }
   }, [menuOpen])
+
+  useEffect(() => {
+    const handleShortcut = (event) => {
+      const tag = (event.target.tagName || '').toLowerCase()
+      const typing =
+        tag === 'input' || tag === 'textarea' || tag === 'select' || event.target.isContentEditable
+
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setSearchOpen(true)
+      } else if (event.key === '/' && !typing) {
+        event.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+
+    window.addEventListener('keydown', handleShortcut)
+    return () => window.removeEventListener('keydown', handleShortcut)
+  }, [])
 
   const closeMenu = () => {
     setMenuOpen(false)
@@ -79,13 +101,16 @@ function Header() {
 
           <div className="header-right">
 
-            <a
-              href={`tel:${site.phone.replace(/\s/g, '')}`}
-              className="header-phone"
-              aria-label={`Call ${site.phone}`}
+            <button
+              type="button"
+              className="header-phone header-search"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search the website"
+              aria-haspopup="dialog"
+              title="Search ( / )"
             >
-              <span aria-hidden="true">⌕</span>
-            </a>
+              <Search size={17} strokeWidth={1.8} aria-hidden="true" />
+            </button>
 
             <Link
               to="/contact"
@@ -158,6 +183,18 @@ function Header() {
         </div>
 
 
+        <button
+          type="button"
+          className="mobile-search-trigger"
+          onClick={() => {
+            closeMenu()
+            setSearchOpen(true)
+          }}
+        >
+          <Search size={18} strokeWidth={1.8} aria-hidden="true" />
+          <span>Search the website</span>
+        </button>
+
         <div className="mobile-navigation-label">
           NAVIGATION
         </div>
@@ -215,6 +252,11 @@ function Header() {
         </div>
 
       </aside>
+
+      <SearchOverlay
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+      />
     </>
   )
 }

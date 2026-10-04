@@ -2,6 +2,9 @@
 
 Pages: Home, About, Projects, Project Showcase (`/projects/:id`), Gallery, Locations, Contact, FAQ, Privacy, Terms, 404.
 
+## Features
+Site search (header icon, `/` or Ctrl+K), project pages with floor/master plan zoom, gallery with in-page films, Locations and Contact maps, validated enquiry forms (honeypot + rate limit), brochure PDFs, cookie consent, WhatsApp/Call buttons, SEO tags, sitemap, 404 page.
+
 ## Run
 ```
 npm install

@@ -52,7 +52,7 @@ function Locations() {
             <p className="section-eyebrow">OUR LOCATIONS</p>
 
             <h1>
-              Well connected.
+              Well connected.{' '}
               <span>Carefully chosen.</span>
             </h1>
 
@@ -77,7 +77,7 @@ function Locations() {
                 <p className="section-eyebrow">LOCATION MATTERS</p>
 
                 <h2>
-                  The right home
+                  The right home{' '}
                   <span>starts with the right place.</span>
                 </h2>
               </div>
@@ -99,7 +99,7 @@ function Locations() {
                 <p className="section-eyebrow">DESTINATIONS</p>
 
                 <h2>
-                  Explore our
+                  Explore our{' '}
                   <span>locations.</span>
                 </h2>
               </div>
@@ -216,7 +216,7 @@ function Locations() {
               <p className="section-eyebrow">FIND US</p>
 
               <h2>
-                Connected to
+                Connected to{' '}
                 <span>the city.</span>
               </h2>
 
@@ -282,7 +282,7 @@ function Locations() {
                 </p>
 
                 <h2>
-                  Live close to
+                  Live close to{' '}
                   <span>what matters.</span>
                 </h2>
 
@@ -342,7 +342,7 @@ function Locations() {
             <p className="section-eyebrow">FIND YOUR ADDRESS</p>
 
             <h2>
-              Know the location.
+              Know the location.{' '}
               <span>Discover the lifestyle.</span>
             </h2>
 

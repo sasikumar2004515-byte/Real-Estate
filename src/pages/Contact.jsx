@@ -148,7 +148,7 @@ function Contact() {
             <p className="section-eyebrow">GET IN TOUCH</p>
 
             <h1>
-              Let's start
+              Let's start{' '}
               <span>a conversation.</span>
             </h1>
 
@@ -171,7 +171,7 @@ function Contact() {
                 <p className="section-eyebrow">CONTACT DETAILS</p>
 
                 <h2>
-                  We would love to
+                  We would love to{' '}
                   <span>hear from you.</span>
                 </h2>
 
@@ -227,7 +227,7 @@ function Contact() {
                   </a>
 
                   <a
-                    href={`https://wa.me/${site.phone.replace(/\D/g, '')}`}
+                    href={`https://wa.me/${site.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
                     className="button button-outline"
@@ -431,7 +431,7 @@ function Contact() {
               <p className="section-eyebrow">VISIT OUR OFFICE</p>
 
               <h2>
-                Come and
+                Come and{' '}
                 <span>meet us.</span>
               </h2>
 
@@ -499,7 +499,7 @@ function Contact() {
                 </p>
 
                 <h2>
-                  We may already have
+                  We may already have{' '}
                   <span>the answer.</span>
                 </h2>
               </div>
@@ -534,7 +534,7 @@ function Contact() {
             <p className="section-eyebrow">YOUR NEXT ADDRESS</p>
 
             <h2>
-              Let's find a place
+              Let's find a place{' '}
               <span>that feels right.</span>
             </h2>
 

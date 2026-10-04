@@ -151,7 +151,7 @@ function GalleryChapter({
           <HairLine />
         </div>
 
-        <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4 ${mirrored ? 'lg:grid-cols-[400px_780px]' : 'lg:grid-cols-[780px_400px]'} lg:gap-5`}>
+        <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4 ${mirrored ? 'lg:grid-cols-[minmax(0,400fr)_minmax(0,780fr)]' : 'lg:grid-cols-[minmax(0,780fr)_minmax(0,400fr)]'} lg:gap-5`}>
 
           {mirrored && tall && (
             <ChapterImage

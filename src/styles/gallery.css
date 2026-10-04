@@ -1,18 +1,9 @@
-/* =========================================
-   GALLERY STYLES
-   Tailwind v4: theme + utilities only (NO preflight), so existing
-   pages are not affected. Utilities are intentionally NOT in a cascade
-   layer: global.css is unlayered (e.g. `button { font: inherit }`) and
-   would otherwise override text-size utilities on buttons.
-   ========================================= */
+
 
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css";
 
-/* Scan all components for utility classes */
-@source "../";
 
-/* Resets use :where() = zero specificity, so utilities always win */
 :where(.gallery-page) {
   background: #faf6ee;
   color: #1c1f26;
@@ -33,7 +24,6 @@
   max-width: none;
 }
 
-/* Hairline draw animation (HairLine.jsx) */
 .gallery-hairline > span {
   transform: scaleX(0);
   transform-origin: left;
