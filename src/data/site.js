@@ -2,36 +2,8 @@ export const site = {
   brand: 'NIVORA',
   tagline: 'Thoughtfully Designed. Beautifully Lived.',
   phone: '+91 98765 43210',
-  whatsapp: '919876543210',
   email: 'hello@nivora.com',
-  address: 'Chennai, Tamil Nadu, India',
-  url: 'https://www.nivora.com',
-  hours: 'Monday - Saturday, 09:00 AM - 06:00 PM',
-
-  // Office map position (OpenStreetMap embed)
-  map: { lat: 13.0827, lng: 80.2707, zoom: 12 },
-
-  // Enquiry form endpoint (Formspree / Netlify / own API). Leave empty = demo mode.
-  formEndpoint: '',
-
-  // Analytics (loads ONLY after cookie consent). Example: 'G-XXXXXXXXXX'. Empty = off.
-  analyticsId: '',
-
-  social: {
-    instagram: 'https://instagram.com',
-    facebook: 'https://facebook.com',
-    youtube: 'https://youtube.com',
-    linkedin: 'https://linkedin.com'
-  }
-}
-
-// Map centres for the Locations page
-export const locationPoints = {
-  ECR: { lat: 12.9496, lng: 80.2554, zoom: 12 },
-  OMR: { lat: 12.9010, lng: 80.2279, zoom: 12 },
-  'Anna Nagar': { lat: 13.0850, lng: 80.2101, zoom: 13 },
-  Velachery: { lat: 12.9815, lng: 80.2180, zoom: 13 },
-  Tambaram: { lat: 12.9249, lng: 80.1000, zoom: 13 }
+  address: 'Chennai, Tamil Nadu, India'
 }
 
 export const navigation = [
@@ -76,7 +48,7 @@ export const projects = [
     category: 'Villas',
     configuration: '3 & 4 BHK',
     status: 'Ready to Move',
-    area: '2,400 — 3,800 sq.ft',
+    area: '2,400 - 3,800 sq.ft',
     price: '₹1.85 Cr onwards',
     description:
       'Private luxury villas designed around open spaces, natural light and a refined coastal lifestyle.',
@@ -96,7 +68,7 @@ export const projects = [
     category: 'Apartments',
     configuration: '2 & 3 BHK',
     status: 'Ongoing',
-    area: '1,180 — 1,950 sq.ft',
+    area: '1,180 - 1,950 sq.ft',
     price: '₹78 Lakhs onwards',
     description:
       'Contemporary apartments with practical layouts, premium amenities and excellent urban connectivity.',
@@ -116,7 +88,7 @@ export const projects = [
     category: 'Luxury',
     configuration: '3 & 4 BHK',
     status: 'Upcoming',
-    area: '1,850 — 3,100 sq.ft',
+    area: '1,850 - 3,100 sq.ft',
     price: '₹1.45 Cr onwards',
     description:
       'Elegant residences combining sophisticated interiors, generous living spaces and an established neighbourhood.',
@@ -136,7 +108,7 @@ export const projects = [
     category: 'Apartments',
     configuration: '2 & 3 BHK',
     status: 'Ongoing',
-    area: '1,050 — 1,780 sq.ft',
+    area: '1,050 - 1,780 sq.ft',
     price: '₹72 Lakhs onwards',
     description:
       'Well-connected urban residences created for comfortable family living with modern community amenities.',
@@ -156,7 +128,7 @@ export const projects = [
     category: 'Villas',
     configuration: '3 BHK',
     status: 'Ready to Move',
-    area: '1,900 — 2,600 sq.ft',
+    area: '1,900 - 2,600 sq.ft',
     price: '₹98 Lakhs onwards',
     description:
       'Warm and spacious villas surrounded by greenery with everyday essentials within easy reach.',
@@ -176,7 +148,7 @@ export const projects = [
     category: 'Apartments',
     configuration: '1, 2 & 3 BHK',
     status: 'New Launch',
-    area: '680 — 1,650 sq.ft',
+    area: '680 - 1,650 sq.ft',
     price: '₹49 Lakhs onwards',
     description:
       'A contemporary residential community positioned for connected city living and everyday convenience.',

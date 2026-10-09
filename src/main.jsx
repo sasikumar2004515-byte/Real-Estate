@@ -7,7 +7,12 @@ import App from './App'
 import './styles/global.css'
 import './styles/home.css'
 import './styles/animation.css'
-import './styles/gallery.css'
+import './styles/nx.css'
+import './styles/home-sections.css'
+import './styles/tailwind.css'
+import './styles/lux.css'
+import './styles/lux-home.css'
+import './styles/lux-pages.css'
 import './scripts/animation.js'
 
 ReactDOM.createRoot(
@@ -19,6 +24,3 @@ ReactDOM.createRoot(
     </HelmetProvider>
   </React.StrictMode>
 )
-
-// Failsafe: never leave the page hidden if something delays the animation manager
-window.setTimeout(() => document.body.classList.add('page-ready'), 1500)

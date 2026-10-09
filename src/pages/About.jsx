@@ -1,30 +1,17 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Seo from '../components/Seo'
+import { projects, locations } from '../data/site'
 
+
+const readyHomes = projects.filter((item) => item.status === 'Ready to Move').length
+const homeTypes = new Set(projects.map((item) => item.type)).size
 
 const stats = [
-  {
-    value: 10,
-    suffix: '+',
-    label: 'Years of Experience'
-  },
-  {
-    value: 25,
-    suffix: '+',
-    label: 'Completed Projects'
-  },
-  {
-    value: 500,
-    suffix: '+',
-    label: 'Happy Families'
-  },
-  {
-    value: 8,
-    suffix: '+',
-    label: 'Service Areas'
-  }
+  { value: projects.length, suffix: '', label: 'Projects' },
+  { value: readyHomes, suffix: '', label: 'Ready to Move' },
+  { value: homeTypes, suffix: '', label: 'Home Types' },
+  { value: locations.length, suffix: '', label: 'Locations' }
 ]
 
 const values = [
@@ -73,39 +60,9 @@ const workSteps = [
   }
 ]
 
-const team = [
-  {
-    image: '/images/team/team-member-1.webp',
-    name: 'Team Member',
-    role: 'Managing Director'
-  },
-  {
-    image: '/images/team/team-member-2.webp',
-    name: 'Team Member',
-    role: 'Head of Projects'
-  },
-  {
-    image: '/images/team/team-member-3.webp',
-    name: 'Team Member',
-    role: 'Customer Relations'
-  },
-  {
-    image: '/images/team/team-member-4.webp',
-    name: 'Team Member',
-    role: 'Sales & Advisory'
-  }
-]
-
 function About() {
   return (
     <>
-      <Seo
-        title="About Us"
-        description="Our story, mission, values and quality standards. Learn how NIVORA builds thoughtfully designed homes in Chennai."
-        image="/images/about/about-hero.webp"
-        path="/about"
-      />
-
       <Header />
 
       <main className="about-page">
@@ -430,53 +387,6 @@ function About() {
         </section>
 
 
-        {/* Team */}
-        <section className="about-section about-team">
-          <div className="about-container">
-
-            <div className="about-section-heading about-section-heading--center">
-              <span className="about-section-label">
-                OUR PEOPLE
-              </span>
-
-              <h2>
-                Meet the
-                <br />
-                <em>Team.</em>
-              </h2>
-            </div>
-
-
-            <div
-              className="about-team__grid"
-              data-stagger
-            >
-              {team.map((member) => (
-                <article
-                  className="about-team-card"
-                  data-animate="fade-up"
-                  key={`${member.name}-${member.role}`}
-                >
-                  <div className="about-team-card__image">
-                    <img
-                      src={member.image}
-                      alt={`${member.name}, ${member.role}`}
-                      width="900"
-                      height="1100"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className="about-team-card__content">
-                    <h3>{member.name}</h3>
-                    <span>{member.role}</span>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-          </div>
-        </section>
 
 
         {/* CTA */}

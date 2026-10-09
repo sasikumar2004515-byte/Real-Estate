@@ -15,7 +15,6 @@ function CursorView() {
 
   const frameRef = useRef(null)
   const activeRef = useRef(false)
-  const movedRef = useRef(false)
 
   const [enabled, setEnabled] = useState(false)
 
@@ -98,12 +97,6 @@ function CursorView() {
         scale(${scale})
       `
 
-      // Show only while hovering [data-cursor="view"] items
-      element.style.opacity =
-        movedRef.current && activeRef.current
-          ? '1'
-          : '0'
-
       frameRef.current =
         window.requestAnimationFrame(
           animate
@@ -111,11 +104,6 @@ function CursorView() {
     }
 
     const handlePointerMove = (event) => {
-      if (!movedRef.current) {
-        movedRef.current = true
-        positionRef.current = { x: event.clientX, y: event.clientY }
-      }
-
       targetRef.current = {
         x: event.clientX,
         y: event.clientY
@@ -183,7 +171,7 @@ function CursorView() {
       aria-hidden="true"
       className="pointer-events-none fixed left-0 top-0 z-[9999] flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[#C9A96E] bg-[#0B1A2E]/10 font-['Inter'] text-[12px] font-medium text-[#0B1A2E] opacity-0 mix-blend-normal transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
       style={{
-        opacity: 0,
+        opacity: 1,
         willChange: 'transform'
       }}
     >

@@ -41,7 +41,7 @@ function FilmPlayer({
     useState(false)
 
   const [started, setStarted] =
-    useState(Boolean(autoPlayOnMount && item?.src))
+    useState(Boolean(autoPlayOnMount))
 
   const [muted, setMuted] =
     useState(false)
@@ -212,10 +212,7 @@ function FilmPlayer({
     }
   }, [started, item?.type])
 
-  const hasSource = Boolean(item?.src)
-
   const startPlayer = async () => {
-    if (!hasSource) return
     setStarted(true)
 
     if (item?.type !== 'mp4') {
@@ -430,9 +427,8 @@ function FilmPlayer({
           <div className="absolute bottom-5 left-5 right-5">
 
             <p className="font-['Inter'] text-[12px] font-medium uppercase tracking-[0.08em] text-white/75">
-              {hasSource
-                ? `Watch the film · ${item.duration}`
-                : `Film coming soon · ${item.duration}`}
+              Watch the film ·{' '}
+              {item.duration}
             </p>
 
             <h3 className="mt-2 font-['Manrope'] text-lg font-semibold text-white sm:text-xl">

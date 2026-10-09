@@ -240,6 +240,16 @@ function VideoPlayer({
   ])
 
   useEffect(() => {
+    const onChange = () => {
+      if (!document.fullscreenElement) {
+        try { window.screen.orientation.unlock() } catch { /* ignore */ }
+      }
+    }
+    document.addEventListener('fullscreenchange', onChange)
+    return () => document.removeEventListener('fullscreenchange', onChange)
+  }, [])
+
+  useEffect(() => {
     return () => {
       const video =
         videoRef.current
@@ -254,6 +264,14 @@ function VideoPlayer({
 
   const startPlayer = async () => {
     setStarted(true)
+
+    // open full screen straight from the click, otherwise the browser blocks it
+    const box = containerRef.current
+    if (box && !document.fullscreenElement && box.requestFullscreen) {
+      try { await box.requestFullscreen() } catch { /* stays inline if the browser refuses */ }
+      // phones: turn the screen sideways so the film fills it
+      try { await window.screen.orientation.lock('landscape') } catch { /* not supported, fine */ }
+    }
 
     if (item?.type !== 'mp4') {
       return

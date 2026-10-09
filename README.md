@@ -1,35 +1,8 @@
-# NIVORA - Static Real Estate Website (React + Vite)
+# Nivora
 
-Pages: Home, About, Projects, Project Showcase (`/projects/:id`), Gallery, Locations, Contact, FAQ, Privacy, Terms, 404.
+Website for Nivora, a Chennai real estate developer. React and Vite, with Tailwind utilities for the gallery.
 
-## Features
-Site search (header icon, `/` or Ctrl+K), project pages with floor/master plan zoom, gallery with in-page films, Locations and Contact maps, validated enquiry forms (honeypot + rate limit), brochure PDFs, cookie consent, WhatsApp/Call buttons, SEO tags, sitemap, 404 page.
+Install the packages once with `npm install`, then start it with `npm run dev`. For a production build use `npm run build`.
 
-## Run
-```
-npm install
-npm run dev        # development
-npm run build      # production build -> dist/
-npm run preview    # test the production build
-```
-
-## Change content (no code needed in most cases)
-| What | Where |
-|---|---|
-| Brand, phone, WhatsApp, email, address, map position, social links | `src/data/site.js` -> `site` |
-| Projects (name, status, price, highlights, image) | `src/data/site.js` -> `projects` |
-| Locations and map points | `src/data/site.js` -> `locations`, `locationPoints` |
-| FAQ, testimonials | `src/data/site.js` |
-| Gallery photos and chapters | `src/data/galleryChapters.js` |
-| Films (own MP4 files) | `src/data/films.js` + `public/videos/` |
-| Brochure PDFs | `public/brochures/<project-id>.pdf` (same name as project id) |
-| Images | `public/images/...` (WebP, max 1920px wide) |
-
-## Before going live
-1. **Enquiry form:** set `formEndpoint` in `src/data/site.js` (Formspree, Netlify Forms or your API). Empty = demo mode (nothing is sent).
-2. **Analytics:** set `analyticsId` (e.g. `G-XXXXXXXXXX`). It loads only after the visitor accepts cookies.
-3. **Domain:** replace `https://www.nivora.com` in `site.url`, `public/robots.txt`, `public/sitemap.xml`.
-4. **Legal:** review `Privacy.jsx` and `Terms.jsx` with your legal advisor.
-5. **Testimonials:** replace placeholder text with approved customer feedback only.
-6. **Videos / gallery photos:** the included films are placeholders made from project images. Replace with real films.
-7. Use HTTPS on your host. `public/_redirects` handles page refresh on Netlify (for other hosts, redirect all routes to `index.html`).
+The home page hero is an 18 second film drawn frame by frame to a canvas as you scroll. The frames are in `public/hero`.
+Project, location, FAQ and gallery content lives in `src/data/site.js`.

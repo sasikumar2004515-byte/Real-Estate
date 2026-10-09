@@ -1,6 +1,5 @@
 /* Global */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
   --charcoal: #1c1d1b;
@@ -30,7 +29,6 @@ body {
   padding: 0;
   background: var(--ivory);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -88,7 +86,6 @@ img {
 
 .section-heading h2 {
   margin: 18px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(36px, 4vw, 62px);
   line-height: 1.05;
   font-weight: 500;
@@ -113,7 +110,9 @@ img {
   }
 }
 /* ==================== SITE HEADER ==================== */
-
+/* =========================================
+   HEADER
+   ========================================= */
 
 .site-header {
   position: fixed;
@@ -148,6 +147,10 @@ img {
 }
 
 
+/* =========================================
+   HEADER INNER
+   ========================================= */
+
 .header-inner {
   width: min(1240px, calc(100% - 48px));
   min-height: 78px;
@@ -168,6 +171,10 @@ img {
   min-height: 70px;
 }
 
+
+/* =========================================
+   BRAND
+   ========================================= */
 
 .site-brand {
   display: inline-flex;
@@ -194,7 +201,6 @@ img {
 
   color: #0B1A2E;
 
-  font-family: "Manrope", sans-serif;
   font-size: 14px;
   font-weight: 800;
 
@@ -220,7 +226,6 @@ img {
 }
 
 .site-brand-text strong {
-  font-family: "Manrope", sans-serif;
 
   font-size: 15px;
   font-weight: 800;
@@ -235,7 +240,6 @@ img {
 
   color: #77736b;
 
-  font-family: "Inter", sans-serif;
 
   font-size: 7px;
   font-weight: 700;
@@ -243,6 +247,10 @@ img {
   letter-spacing: 0.2em;
 }
 
+
+/* =========================================
+   DESKTOP NAVIGATION
+   ========================================= */
 
 .desktop-navigation {
   display: flex;
@@ -260,7 +268,6 @@ img {
 
   color: #5f5d58;
 
-  font-family: "Inter", sans-serif;
 
   font-size: 11px;
   font-weight: 600;
@@ -311,6 +318,10 @@ img {
   right: 0;
 }
 
+
+/* =========================================
+   HEADER ACTIONS
+   ========================================= */
 
 .header-right {
   display: flex;
@@ -372,7 +383,6 @@ img {
 
   color: #0B1A2E;
 
-  font-family: "Inter", sans-serif;
 
   font-size: 10px;
   font-weight: 700;
@@ -407,6 +417,9 @@ img {
 }
 
 
+/* =========================================
+   MENU BUTTON
+   ========================================= */
 
 .header-menu-button {
   width: 40px;
@@ -453,6 +466,11 @@ img {
     opacity 0.3s ease;
 }
 
+
+/* =========================================
+   MOBILE OVERLAY
+   ========================================= */
+
 .mobile-navigation-overlay {
   position: fixed;
 
@@ -476,6 +494,9 @@ img {
 }
 
 
+/* =========================================
+   MOBILE DRAWER
+   ========================================= */
 
 .mobile-navigation-drawer {
   position: fixed;
@@ -495,7 +516,8 @@ img {
 
   background: #FAF6EE;
 
-  box-shadow: none;
+  box-shadow:
+    -25px 0 70px rgba(0, 0, 0, 0.16);
 
   transform: translateX(105%);
 
@@ -506,7 +528,6 @@ img {
 }
 
 .mobile-navigation-drawer.active {
-  box-shadow: -25px 0 70px rgba(0, 0, 0, 0.16);
   transform: translateX(0);
 }
 
@@ -563,7 +584,6 @@ img {
 
   color: #8d7650;
 
-  font-family: "Inter", sans-serif;
 
   font-size: 9px;
   font-weight: 700;
@@ -589,7 +609,6 @@ img {
 
   color: #0B1A2E;
 
-  font-family: "Manrope", sans-serif;
 
   font-size: 21px;
   font-weight: 600;
@@ -604,7 +623,6 @@ img {
 .mobile-navigation-link small {
   color: #9a968e;
 
-  font-family: "Inter", sans-serif;
 
   font-size: 9px;
   font-weight: 700;
@@ -640,7 +658,6 @@ img {
 
   color: #ffffff;
 
-  font-family: "Inter", sans-serif;
 
   font-size: 12px;
   font-weight: 700;
@@ -681,7 +698,6 @@ img {
 .mobile-drawer-contact a {
   color: #77736b;
 
-  font-family: "Inter", sans-serif;
 
   font-size: 10px;
 
@@ -694,6 +710,10 @@ img {
   color: #A6844F;
 }
 
+
+/* =========================================
+   TABLET
+   ========================================= */
 
 @media (max-width: 1050px) {
   .header-inner {
@@ -714,6 +734,11 @@ img {
     padding: 0 14px;
   }
 }
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
 
 @media (max-width: 850px) {
   .header-inner {
@@ -742,6 +767,11 @@ img {
     margin-left: auto;
   }
 }
+
+
+/* =========================================
+   SMALL MOBILE
+   ========================================= */
 
 @media (max-width: 480px) {
   .header-inner {
@@ -794,6 +824,10 @@ img {
   }
 }
 
+
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .site-header,
@@ -852,7 +886,7 @@ img {
   z-index: 1;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 92px 48px 72px;
+  padding: 51px 48px 40px;
 }
 
 .footer-grid {
@@ -870,7 +904,6 @@ img {
   align-items: center;
   color: var(--ivory);
   text-decoration: none;
-  font-family: 'Manrope', sans-serif;
   font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -921,7 +954,6 @@ img {
 .footer-column h3 {
   margin: 0 0 24px;
   color: var(--ivory);
-  font-family: 'Manrope', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -1030,7 +1062,7 @@ img {
 
 @media (max-width: 1100px) {
   .footer-main {
-    padding: 78px 32px 60px;
+    padding: 43px 32px 60px;
   }
 
   .footer-grid {
@@ -1158,7 +1190,6 @@ img {
 
 .home-projects .section-heading h2 {
   margin: 19px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 4.8vw, 66px);
   font-weight: 500;
   line-height: 1.01;
@@ -1302,7 +1333,6 @@ img {
 
 .home-project-image-title h3 {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
   font-size: 26px;
   font-weight: 500;
   line-height: 1.1;
@@ -1404,7 +1434,6 @@ img {
   display: block;
   max-width: 470px;
   margin-top: 10px;
-  font-family: 'Manrope', sans-serif;
   font-size: 26px;
   font-weight: 500;
   line-height: 1.2;
@@ -1412,7 +1441,7 @@ img {
 }
 
 .home-philosophy-content {
-  padding: 95px 0;
+  padding: 52px 0;
   display: flex;
   align-items: center;
   background:
@@ -1431,7 +1460,6 @@ img {
 
 .home-philosophy-inner h2 {
   margin: 20px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(40px, 4.1vw, 59px);
   font-weight: 500;
   line-height: 1.02;
@@ -1529,7 +1557,6 @@ img {
 
 .home-locations .section-heading h2 {
   margin: 19px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 4.8vw, 66px);
   font-weight: 500;
   line-height: 1.01;
@@ -1616,7 +1643,6 @@ img {
 
 .home-location-content h3 {
   margin: 8px 0 7px;
-  font-family: 'Manrope', sans-serif;
   font-size: 30px;
   font-weight: 500;
   line-height: 1;
@@ -1698,7 +1724,7 @@ img {
 .home-testimonial-content {
   max-width: 920px;
   margin: 0 auto;
-  padding: 110px 0;
+  padding: 61px 0;
   text-align: center;
 }
 
@@ -1709,7 +1735,6 @@ img {
 .home-testimonial-quote {
   margin: 34px 0 8px;
   color: var(--gold-light);
-  font-family: Georgia, 'Times New Roman', serif;
   font-size: 78px;
   line-height: .42;
 }
@@ -1717,7 +1742,6 @@ img {
 .home-testimonial-content blockquote {
   max-width: 850px;
   margin: 0 auto 34px;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(30px, 4vw, 54px);
   font-weight: 400;
   line-height: 1.14;
@@ -1786,8 +1810,8 @@ img {
 }
 
 .home-final-cta-content {
-  padding-top: 105px;
-  padding-bottom: 105px;
+  padding-top: 58px;
+  padding-bottom: 58px;
 }
 
 .home-final-cta-content .section-eyebrow {
@@ -1797,7 +1821,6 @@ img {
 .home-final-cta-content h2 {
   max-width: 850px;
   margin: 22px 0 23px;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(46px, 5.7vw, 80px);
   font-weight: 500;
   line-height: .98;
@@ -1896,7 +1919,7 @@ img {
 
 @media (max-width: 900px) {
   .section-padding {
-    padding: 95px 0;
+    padding: 52px 0;
   }
 
   .home-intro-grid {
@@ -1939,7 +1962,7 @@ img {
   }
 
   .home-philosophy-content {
-    padding: 80px 0;
+    padding: 44px 0;
   }
 
   .home-location-grid {
@@ -1966,7 +1989,7 @@ img {
   }
 
   .section-padding {
-    padding: 76px 0;
+    padding: 42px 0;
   }
 
   .section-eyebrow {
@@ -1992,13 +2015,13 @@ img {
   }
 
   .home-hero {
-    min-height: 82vh;
+    min-height: 60vh;
   }
 
   .home-hero-content {
-    min-height: 82vh;
-    padding-top: 115px;
-    padding-bottom: 100px;
+    min-height: 60vh;
+    padding-top: 63px;
+    padding-bottom: 55px;
   }
 
   .home-hero-copy {
@@ -2069,7 +2092,7 @@ img {
   }
 
   .home-statement {
-    padding-bottom: 76px;
+    padding-bottom: 42px;
   }
 
   .home-statement-image {
@@ -2220,7 +2243,7 @@ img {
   }
 
   .home-testimonial-content {
-    padding: 78px 0;
+    padding: 43px 0;
   }
 
   .home-testimonial-quote {
@@ -2238,8 +2261,8 @@ img {
   }
 
   .home-final-cta-content {
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding-top: 44px;
+    padding-bottom: 44px;
   }
 
   .home-final-cta-content h2 {
@@ -2261,7 +2284,7 @@ img {
   }
 
   .home-hero-content {
-    padding-top: 105px;
+    padding-top: 58px;
   }
 
   .home-hero-copy h1 {
@@ -2338,17 +2361,15 @@ img {
 
   background: var(--projects-ivory);
   color: var(--projects-charcoal);
-  font-family: 'Inter', sans-serif;
 }
 
 .projects-page h1,
 .projects-page h2,
 .projects-page h3 {
-  font-family: 'Manrope', sans-serif;
 }
 
 .projects-container {
-  width: min(1240px, calc(100% - 48px));
+  width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
 }
 
@@ -2500,7 +2521,6 @@ img {
   background: transparent;
   color: var(--projects-navy);
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 600;
   transition:
@@ -2525,7 +2545,7 @@ img {
 /* Featured */
 
 .projects-featured {
-  padding: 95px 0;
+  padding: 52px 0;
   background: var(--projects-ivory);
 }
 
@@ -2738,7 +2758,7 @@ img {
 /* Project Grid */
 
 .projects-grid-section {
-  padding: 95px 0;
+  padding: 52px 0;
   background: var(--projects-stone);
 }
 
@@ -2920,7 +2940,7 @@ img {
 /* Category Grouping */
 
 .projects-categories {
-  padding: 95px 0;
+  padding: 52px 0;
   background: var(--projects-ivory);
 }
 
@@ -3001,7 +3021,6 @@ img {
   background: transparent;
   color: #fff;
   cursor: pointer;
-  font-family: inherit;
   font-size: 12px;
   font-weight: 700;
 }
@@ -3014,7 +3033,7 @@ img {
 /* CTA */
 
 .projects-cta {
-  padding: 85px 0;
+  padding: 47px 0;
   background: var(--projects-navy);
   color: #fff;
 }
@@ -3163,22 +3182,20 @@ img {
 
   background: var(--about-ivory);
   color: var(--about-charcoal);
-  font-family: 'Inter', sans-serif;
 }
 
 .about-page h1,
 .about-page h2,
 .about-page h3 {
-  font-family: 'Manrope', sans-serif;
 }
 
 .about-container {
-  width: min(1240px, calc(100% - 48px));
+  width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
 }
 
 .about-section {
-  padding: 90px 0;
+  padding: 50px 0;
 }
 
 .about-eyebrow,
@@ -3426,7 +3443,6 @@ img {
   top: 44px;
   right: 42px;
   color: rgba(11, 26, 46, 0.28);
-  font-family: 'Manrope', sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -3520,7 +3536,6 @@ img {
   display: block;
   margin-bottom: 9px;
   color: var(--about-gold);
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(34px, 4vw, 52px);
   line-height: 1;
 }
@@ -3580,9 +3595,8 @@ img {
 
 .about-step-card__number {
   display: block;
-  margin-bottom: 75px;
+  margin-bottom: 41px;
   color: var(--about-gold);
-  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   font-weight: 700;
 }
@@ -3604,7 +3618,7 @@ img {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 80px;
-  margin-top: 80px;
+  margin-top: 44px;
   padding-top: 55px;
   border-top: 1px solid rgba(11, 26, 46, 0.14);
 }
@@ -3705,7 +3719,7 @@ img {
 /* CTA */
 
 .about-cta {
-  padding: 85px 0;
+  padding: 47px 0;
   background: var(--about-charcoal);
   color: #fff;
 }
@@ -3950,7 +3964,7 @@ img {
 
 .locations-hero {
   position: relative;
-  min-height: 88vh;
+  min-height: 66vh;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -3978,8 +3992,8 @@ img {
   position: relative;
   z-index: 2;
   width: 100%;
-  padding-top: 180px;
-  padding-bottom: 130px;
+  padding-top: 99px;
+  padding-bottom: 72px;
 }
 
 .locations-hero-content .section-eyebrow {
@@ -3990,7 +4004,6 @@ img {
   max-width: 900px;
   margin: 22px 0 0;
   color: var(--white);
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(58px, 8vw, 112px);
   line-height: .94;
   font-weight: 500;
@@ -4016,7 +4029,7 @@ img {
   right: 0;
   bottom: 30px;
   left: 0;
-  width: min(1240px, calc(100% - 48px));
+  width: min(1400px, calc(100% - 48px));
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -4040,7 +4053,6 @@ img {
 .locations-intro-grid h2 {
   max-width: 650px;
   margin: 20px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 72px);
   line-height: 1.02;
   font-weight: 500;
@@ -4199,7 +4211,6 @@ img {
 
 .location-detail-title h3 {
   margin: 8px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(34px, 4vw, 52px);
   line-height: 1;
   font-weight: 500;
@@ -4266,7 +4277,6 @@ img {
   padding: 11px 0;
   border-bottom: 1px solid rgba(23,26,29,.07);
   color: var(--text);
-  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   transition:
     color .3s ease,
@@ -4441,7 +4451,6 @@ img {
 
 .locations-map-info h3 {
   margin: 20px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(34px, 4vw, 54px);
   line-height: 1.02;
   font-weight: 500;
@@ -4466,7 +4475,7 @@ img {
 }
 
 .locations-lifestyle {
-  padding: 120px 0;
+  padding: 66px 0;
   background: var(--stone);
 }
 
@@ -4480,7 +4489,6 @@ img {
 .locations-lifestyle-content h2 {
   max-width: 600px;
   margin: 20px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 68px);
   line-height: 1;
   font-weight: 500;
@@ -4601,7 +4609,6 @@ img {
 .locations-cta-content h2 {
   max-width: 850px;
   margin: 22px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(48px, 6vw, 82px);
   line-height: .98;
   font-weight: 500;
@@ -4647,12 +4654,12 @@ img {
 
 @media (max-width: 1000px) {
   .locations-hero {
-    min-height: 76vh;
+    min-height: 54vh;
   }
 
   .locations-hero-content {
-    padding-top: 160px;
-    padding-bottom: 110px;
+    padding-top: 88px;
+    padding-bottom: 61px;
   }
 
   .locations-intro-grid {
@@ -4693,12 +4700,12 @@ img {
 
 @media (max-width: 640px) {
   .locations-hero {
-    min-height: 78vh;
+    min-height: 56vh;
   }
 
   .locations-hero-content {
-    padding-top: 140px;
-    padding-bottom: 100px;
+    padding-top: 77px;
+    padding-bottom: 55px;
   }
 
   .locations-hero-content h1 {
@@ -4773,7 +4780,7 @@ img {
   }
 
   .locations-lifestyle {
-    padding: 80px 0;
+    padding: 44px 0;
   }
 
   .locations-lifestyle-content h2 {
@@ -4843,7 +4850,7 @@ img {
 
 .faq-hero {
   position: relative;
-  min-height: 88vh;
+  min-height: 66vh;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -4871,8 +4878,8 @@ img {
   position: relative;
   z-index: 2;
   width: 100%;
-  padding-top: 180px;
-  padding-bottom: 130px;
+  padding-top: 99px;
+  padding-bottom: 72px;
 }
 
 .faq-hero-content .section-eyebrow {
@@ -4883,7 +4890,6 @@ img {
   max-width: 900px;
   margin: 22px 0 0;
   color: var(--white);
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(58px, 8vw, 112px);
   line-height: .94;
   font-weight: 500;
@@ -4909,7 +4915,7 @@ img {
   right: 0;
   bottom: 30px;
   left: 0;
-  width: min(1240px, calc(100% - 48px));
+  width: min(1400px, calc(100% - 48px));
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -4938,7 +4944,6 @@ img {
 .faq-sidebar h2 {
   max-width: 430px;
   margin: 20px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(40px, 4.5vw, 62px);
   line-height: 1;
   font-weight: 500;
@@ -4992,7 +4997,6 @@ img {
 }
 
 .faq-category-list button span {
-  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   font-weight: 600;
 }
@@ -5095,7 +5099,6 @@ img {
 }
 
 .faq-question-text {
-  font-family: 'Manrope', sans-serif;
   font-size: 18px;
   line-height: 1.4;
   font-weight: 600;
@@ -5160,7 +5163,7 @@ img {
 }
 
 .faq-empty {
-  padding: 80px 20px;
+  padding: 44px 20px;
   text-align: center;
 }
 
@@ -5173,7 +5176,6 @@ img {
 
 .faq-empty h3 {
   margin: 16px 0 25px;
-  font-family: 'Manrope', sans-serif;
   font-size: 25px;
   font-weight: 500;
 }
@@ -5237,7 +5239,6 @@ img {
 .faq-feature-content h2 {
   max-width: 600px;
   margin: 20px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 68px);
   line-height: 1;
   font-weight: 500;
@@ -5331,7 +5332,6 @@ img {
 .faq-cta-content h2 {
   max-width: 950px;
   margin: 22px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(46px, 6vw, 80px);
   line-height: .98;
   font-weight: 500;
@@ -5367,12 +5367,12 @@ img {
 
 @media (max-width: 1000px) {
   .faq-hero {
-    min-height: 76vh;
+    min-height: 54vh;
   }
 
   .faq-hero-content {
-    padding-top: 160px;
-    padding-bottom: 110px;
+    padding-top: 88px;
+    padding-bottom: 61px;
   }
 
   .faq-layout {
@@ -5402,12 +5402,12 @@ img {
 
 @media (max-width: 640px) {
   .faq-hero {
-    min-height: 78vh;
+    min-height: 56vh;
   }
 
   .faq-hero-content {
-    padding-top: 140px;
-    padding-bottom: 100px;
+    padding-top: 77px;
+    padding-bottom: 55px;
   }
 
   .faq-hero-content h1 {
@@ -5511,7 +5511,7 @@ img {
 
 .contact-hero {
   position: relative;
-  min-height: 88vh;
+  min-height: 66vh;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -5538,9 +5538,9 @@ img {
 .contact-hero-content {
   position: relative;
   z-index: 2;
-  width: min(1240px, calc(100% - 48px));
-  padding-top: 180px;
-  padding-bottom: 130px;
+  width: 100%;
+  padding-top: 99px;
+  padding-bottom: 72px;
 }
 
 .contact-hero-content .section-eyebrow {
@@ -5551,7 +5551,6 @@ img {
   max-width: 900px;
   margin: 22px 0 0;
   color: var(--white);
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(58px, 8vw, 112px);
   line-height: .94;
   font-weight: 500;
@@ -5577,7 +5576,7 @@ img {
   right: 0;
   bottom: 30px;
   left: 0;
-  width: min(1240px, calc(100% - 48px));
+  width: min(1400px, calc(100% - 48px));
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -5605,7 +5604,6 @@ img {
 .contact-info h2 {
   max-width: 600px;
   margin: 20px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 68px);
   line-height: 1;
   font-weight: 500;
@@ -5657,7 +5655,6 @@ img {
 }
 
 .contact-detail > strong {
-  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   line-height: 1.5;
   font-weight: 600;
@@ -5691,7 +5688,6 @@ img {
 
 .contact-form-heading h3 {
   margin: 18px 0 12px;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(34px, 4vw, 50px);
   line-height: 1;
   font-weight: 500;
@@ -5808,7 +5804,6 @@ img {
 
 .contact-success h3 {
   margin: 18px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(40px, 4vw, 58px);
   line-height: 1;
   font-weight: 500;
@@ -5958,7 +5953,6 @@ img {
 
 .contact-map-info h3 {
   margin: 20px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(30px, 3.5vw, 48px);
   line-height: 1.05;
   font-weight: 500;
@@ -6015,7 +6009,6 @@ img {
 .contact-faq-grid h2 {
   max-width: 600px;
   margin: 20px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(38px, 4.5vw, 60px);
   line-height: 1;
   font-weight: 500;
@@ -6081,7 +6074,6 @@ img {
 .contact-cta-content h2 {
   max-width: 900px;
   margin: 22px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(48px, 6vw, 82px);
   line-height: .98;
   font-weight: 500;
@@ -6127,12 +6119,12 @@ img {
 
 @media (max-width: 1000px) {
   .contact-hero {
-    min-height: 76vh;
+    min-height: 54vh;
   }
 
   .contact-hero-content {
-    padding-top: 160px;
-    padding-bottom: 110px;
+    padding-top: 88px;
+    padding-bottom: 61px;
   }
 
   .contact-grid {
@@ -6163,12 +6155,12 @@ img {
 
 @media (max-width: 640px) {
   .contact-hero {
-    min-height: 78vh;
+    min-height: 56vh;
   }
 
   .contact-hero-content {
-    padding-top: 140px;
-    padding-bottom: 100px;
+    padding-top: 77px;
+    padding-bottom: 55px;
   }
 
   .contact-hero-content h1 {
@@ -6299,7 +6291,7 @@ img {
 
 .showcase-hero {
   position: relative;
-  min-height: 78vh;
+  min-height: 56vh;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -6338,8 +6330,8 @@ img {
   position: relative;
   z-index: 2;
   width: 100%;
-  padding-top: 150px;
-  padding-bottom: 190px;
+  padding-top: 82px;
+  padding-bottom: 105px;
 }
 
 .showcase-breadcrumb {
@@ -6389,7 +6381,6 @@ img {
 .showcase-hero h1 {
   max-width: 900px;
   margin: 18px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(54px, 7vw, 105px);
   line-height: .92;
   font-weight: 500;
@@ -6448,7 +6439,6 @@ img {
 
 .showcase-meta-item strong {
   color: rgba(255,255,255,.9);
-  font-family: 'Manrope', sans-serif;
   font-size: 13px;
   font-weight: 600;
 }
@@ -6470,7 +6460,6 @@ img {
 .showcase-overview-grid h2 {
   max-width: 620px;
   margin: 18px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 70px);
   line-height: .98;
   font-weight: 500;
@@ -6531,7 +6520,6 @@ img {
 
 .showcase-fact strong {
   display: block;
-  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   font-weight: 600;
 }
@@ -6553,7 +6541,6 @@ img {
 
 .showcase-gallery-heading h2 {
   margin: 15px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 68px);
   line-height: .98;
   font-weight: 500;
@@ -6641,7 +6628,6 @@ img {
 .showcase-amenities-content h2 {
   max-width: 620px;
   margin: 18px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 65px);
   line-height: 1;
   font-weight: 500;
@@ -6706,7 +6692,6 @@ img {
 }
 
 .showcase-highlight-item strong {
-  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   font-weight: 600;
 }
@@ -6757,7 +6742,6 @@ img {
 }
 
 .showcase-amenity strong {
-  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   font-weight: 600;
 }
@@ -6776,7 +6760,6 @@ img {
 .showcase-plans-heading h2 {
   max-width: 720px;
   margin: 18px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 5vw, 65px);
   line-height: 1;
   font-weight: 500;
@@ -6815,7 +6798,6 @@ img {
 
 .showcase-plan-heading h3 {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
   font-size: 25px;
   font-weight: 600;
   letter-spacing: -.03em;
@@ -6823,7 +6805,6 @@ img {
 
 .showcase-plan-heading > span {
   color: #9b7b43;
-  font-family: 'Manrope', sans-serif;
   font-size: 12px;
   font-weight: 700;
 }
@@ -6985,7 +6966,6 @@ img {
 
 .showcase-location-info h3 {
   margin: 0 0 28px;
-  font-family: 'Manrope', sans-serif;
   font-size: 30px;
   font-weight: 600;
   letter-spacing: -.035em;
@@ -7038,7 +7018,6 @@ img {
 
 .showcase-download-card h2 {
   margin: 15px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(35px, 4vw, 55px);
   line-height: 1;
   font-weight: 500;
@@ -7074,7 +7053,6 @@ img {
 
 .showcase-similar-heading h2 {
   margin: 15px 0 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(40px, 5vw, 64px);
   line-height: .98;
   font-weight: 500;
@@ -7141,7 +7119,6 @@ img {
 
 .showcase-similar-content h3 {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
   font-size: 22px;
   font-weight: 600;
 }
@@ -7194,7 +7171,6 @@ img {
 .showcase-enquiry-content h2 {
   max-width: 850px;
   margin: 20px 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(48px, 6vw, 82px);
   line-height: .96;
   font-weight: 500;
@@ -7224,17 +7200,16 @@ img {
 /* NOT FOUND */
 
 .showcase-not-found {
-  min-height: 70vh;
+  min-height: 48vh;
   display: grid;
   place-items: center;
-  padding: 140px 24px;
+  padding: 77px 24px;
   text-align: center;
   background: var(--ivory);
 }
 
 .showcase-not-found h1 {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
   font-size: clamp(42px, 6vw, 72px);
   letter-spacing: -.055em;
 }
@@ -7264,12 +7239,12 @@ img {
 
 @media (max-width: 1000px) {
   .showcase-hero {
-    min-height: 80vh;
+    min-height: 58vh;
   }
 
   .showcase-hero-content {
-    padding-top: 150px;
-    padding-bottom: 180px;
+    padding-top: 82px;
+    padding-bottom: 99px;
   }
 
   .showcase-hero-meta {
@@ -7314,12 +7289,12 @@ img {
 
 @media (max-width: 700px) {
   .showcase-hero {
-    min-height: 82vh;
+    min-height: 60vh;
   }
 
   .showcase-hero-content {
-    padding-top: 135px;
-    padding-bottom: 210px;
+    padding-top: 74px;
+    padding-bottom: 116px;
   }
 
   .showcase-breadcrumb {
@@ -7515,7 +7490,6 @@ img {
   border: 0;
   background: transparent;
   color: var(--muted);
-  font-family: 'Inter', sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .08em;
@@ -7565,7 +7539,6 @@ img {
   border: 1px solid var(--border);
   background: transparent;
   color: var(--muted);
-  font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .08em;
@@ -7600,7 +7573,6 @@ img {
 .plan-detail strong {
   display: block;
   margin-bottom: 12px;
-  font-family: 'Manrope', sans-serif;
   font-size: 24px;
   font-weight: 600;
   letter-spacing: -.03em;
@@ -7657,7 +7629,6 @@ img {
   outline: none;
   background: rgba(255,255,255,.045);
   color: #fff;
-  font-family: 'Inter', sans-serif;
   font-size: 13px;
   padding: 15px 16px;
   transition:

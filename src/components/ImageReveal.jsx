@@ -8,21 +8,12 @@ function ImageReveal({
   height,
   priority = false,
   className = '',
-  imageClassName = '',
-  fallbackSrc = ''
+  imageClassName = ''
 }) {
   const rootRef = useRef(null)
 
   const [visible, setVisible] = useState(false)
   const [loaded, setLoaded] = useState(false)
-  const [currentSrc, setCurrentSrc] = useState(src)
-  const [failed, setFailed] = useState(false)
-
-  useEffect(() => {
-    setCurrentSrc(src)
-    setLoaded(false)
-    setFailed(false)
-  }, [src])
 
   useEffect(() => {
     const element = rootRef.current
@@ -69,25 +60,17 @@ function ImageReveal({
       )}
 
       <img
-        src={currentSrc}
+        src={src}
         alt={alt}
         width={width}
         height={height}
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : undefined}
         onLoad={() => setLoaded(true)}
-        onError={() => {
-          if (fallbackSrc && currentSrc !== fallbackSrc) {
-            setCurrentSrc(fallbackSrc)
-          } else {
-            setFailed(true)
-            setLoaded(true)
-          }
-        }}
         className={[
           'absolute inset-0 h-full w-full object-cover',
           'transition-[opacity,transform] duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)]',
-          loaded && !failed ? 'opacity-100' : 'opacity-0',
+          loaded ? 'opacity-100' : 'opacity-0',
           visible ? 'scale-100' : 'scale-[1.12]',
           imageClassName
         ].join(' ')}

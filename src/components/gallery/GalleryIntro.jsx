@@ -1,23 +1,25 @@
-import Reveal from '../Reveal'
+import Wave from '../Wave'
 
-function GalleryIntro() {
+const words = 'Every frame is an invitation to pause. To notice the materials, the light, the proportions and the small details that make a place feel like home.'.split(' ')
+
+function GalleryIntro({ photos, chapters, films }) {
   return (
-    <section className="px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
-
-      <Reveal>
-        <div className="mx-auto max-w-[640px] text-center">
-
-          <p className="font-['Inter'] text-[12px] font-medium uppercase tracking-[0.2em] text-[#6B6F76]">
-            A slower look
+    <section className="gl-intro">
+      <div className="lx-wrap gl-intro-grid">
+        <div>
+          <Wave><p className="lx-kicker lx-kicker--dark">A slower look</p></Wave>
+          <p className="gl-words" aria-label={words.join(' ')}>
+            {words.map((w, i) => (
+              <Wave as="span" key={i} d={Math.min(i, 24) * 0.25} className="gl-word" aria-hidden="true">{w}&nbsp;</Wave>
+            ))}
           </p>
-
-          <p className="mt-5 font-['Inter'] text-base font-normal leading-[1.7] text-[#1C1F26]">
-            Every frame is an invitation to pause — to notice the materials, the light, the proportions and the small details that make a place feel like home.
-          </p>
-
         </div>
-      </Reveal>
-
+        <Wave d={2} className="gl-stats">
+          <div><b>{photos}</b><span>Photographs</span></div>
+          <div><b>{String(chapters).padStart(2, '0')}</b><span>Chapters</span></div>
+          <div><b>{String(films).padStart(2, '0')}</b><span>Short films</span></div>
+        </Wave>
+      </div>
     </section>
   )
 }

@@ -1,210 +1,101 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import Wave from '../Wave'
 
-import MaskText from '../MaskText'
-import ImageReveal from '../ImageReveal'
-import HairLine from '../HairLine'
-import useParallax from '../../hooks/useParallax'
-
-// Local images used only if a remote photo fails to load (no blank boxes)
-const FALLBACKS = [
-  '/images/gallery/gallery-interior.webp',
+const fallbacks = [
   '/images/gallery/gallery-pool.webp',
+  '/images/gallery/gallery-interior.webp',
   '/images/projects/serenity-villas.webp',
+  '/images/about/about-hero.webp',
   '/images/projects/showcase-hero.webp',
-  '/images/projects/lakeside-residences.webp',
-  '/images/about/about-mission.webp'
 ]
 
-function ChapterImage({
-  image,
-  onOpen,
-  index,
-  parallax = false,
-  priority = false
-}) {
-  const parallaxRef = useRef(null)
-
-  // Hook always called; distance 0 disables it
-  useParallax(parallaxRef, parallax ? 24 : 0)
-
-  const imageContent = (
-    <button
-      type="button"
-      data-cursor="view"
-      onClick={() => onOpen(index)}
-      aria-label={`View ${image.title} larger`}
-      className="group block w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A96E] focus-visible:ring-offset-4"
-    >
-      <ImageReveal
-        src={image.src}
-        alt={image.alt}
-        ratio={image.slot === 'large' ? '780 / 480' : image.slot === 'tall' ? '400 / 480' : '4 / 3'}
-        width={
-          image.slot === 'large'
-            ? 1560
-            : image.slot === 'tall'
-              ? 800
-              : 800
-        }
-        height={
-          image.slot === 'large'
-            ? 960
-            : image.slot === 'tall'
-              ? 960
-              : 600
-        }
-        priority={priority}
-        fallbackSrc={FALLBACKS[(image.id.length + image.id.charCodeAt(image.id.length - 1)) % FALLBACKS.length]}
-        imageClassName="transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
-      />
-
-      <p className="mt-3 font-['Inter'] text-[13px] font-normal leading-5 text-[#6B6F76]">
-        {image.title}
-      </p>
-    </button>
-  )
-
-  if (!parallax) {
-    return imageContent
-  }
-
+function Tile({ image, index, onOpen, d = 0, className = '', kind = 'zoom' }) {
+  const [src, setSrc] = useState(image.src)
   return (
-    <div
-      ref={parallaxRef}
-      className="will-change-transform"
-    >
-      {imageContent}
-    </div>
+    <Wave kind={kind} d={d} className={`gl-tile ${className}`}>
+      <button type="button" onClick={() => onOpen(index)} aria-label={`View ${image.caption} larger`}>
+        <img src={src} alt={image.alt} loading="lazy" draggable="false" onError={() => setSrc(fallbacks[index % fallbacks.length])} />
+        <span className="gl-tile-cap">
+          <i>{String(index + 1).padStart(2, '0')}</i>
+          <b>{image.caption}</b>
+          <em>View ↗</em>
+        </span>
+      </button>
+    </Wave>
   )
 }
 
-function GalleryChapter({
-  chapter,
-  chapterIndex = 0,
-  sectionRef,
-  onOpenLightbox
-}) {
-  const onOpen = onOpenLightbox
-  const mirrored = chapterIndex % 2 === 1
+// Six chapters, each with its own layout.
+const layouts = ['mosaic', 'strip', 'grid', 'cinema', 'sticky', 'trio']
 
-  const large =
-    chapter.images.find(
-      (image) =>
-        image.slot === 'large'
-    )
+function GalleryChapter({ chapter, index, chapterRef, onOpen }) {
+  const layout = layouts[index % layouts.length]
+  const rail = useRef(null)
+  const imgs = chapter.images
+  const slide = (dir) => rail.current && rail.current.scrollBy({ left: dir * Math.min(520, rail.current.clientWidth * 0.8), behavior: 'smooth' })
 
-  const tall =
-    chapter.images.find(
-      (image) =>
-        image.slot === 'tall'
-    )
+  const head = (
+    <header className="gl-head">
+      <Wave kind="left" as="span" className="gl-no">{chapter.number}</Wave>
+      <div>
+        <Wave d={1} as="h2">{chapter.title}</Wave>
+        <Wave d={2} as="p">{chapter.description}</Wave>
+      </div>
+      <Wave d={3} as="span" className="gl-count">{imgs.length} photographs</Wave>
+    </header>
+  )
 
-  const equalImages =
-    chapter.images.filter(
-      (image) =>
-        image.slot === 'equal'
+  let body
+  if (layout === 'mosaic') {
+    body = (
+      <div className="gl-mosaic">
+        {imgs.slice(0, 5).map((im, i) => <Tile key={im.id} image={im} index={i} onOpen={onOpen} d={i} className={`m${i + 1}`} />)}
+      </div>
     )
-
-  const largeIndex =
-    chapter.images.findIndex(
-      (image) =>
-        image.id === large?.id
+  } else if (layout === 'strip') {
+    body = (
+      <>
+        <div className="gl-strip" ref={rail} data-native-scroll>
+          {imgs.map((im, i) => <Tile key={im.id} image={im} index={i} onOpen={onOpen} d={i} kind="right" />)}
+        </div>
+        <div className="gl-strip-ui">
+          <button type="button" aria-label="Scroll left" onClick={() => slide(-1)}>←</button>
+          <button type="button" aria-label="Scroll right" onClick={() => slide(1)}>→</button>
+          <span>Scroll sideways</span>
+        </div>
+      </>
     )
-
-  const tallIndex =
-    chapter.images.findIndex(
-      (image) =>
-        image.id === tall?.id
+  } else if (layout === 'grid') {
+    body = <div className="gl-grid">{imgs.map((im, i) => <Tile key={im.id} image={im} index={i} onOpen={onOpen} d={i % 3} className={`g${i + 1}`} />)}</div>
+  } else if (layout === 'cinema') {
+    body = (
+      <>
+        <Tile image={imgs[0]} index={0} onOpen={onOpen} className="gl-wide" kind="rise" />
+        <div className="gl-four">{imgs.slice(1, 5).map((im, i) => <Tile key={im.id} image={im} index={i + 1} onOpen={onOpen} d={i} />)}</div>
+      </>
     )
+  } else if (layout === 'sticky') {
+    body = (
+      <div className="gl-sticky">
+        <div className="gl-sticky-note">
+          <Wave kind="left"><p>Light changes everything. Surfaces, shadows and colour shift through the day, so every material is chosen to look good at every hour.</p></Wave>
+        </div>
+        <div className="gl-sticky-col">{imgs.slice(0, 5).map((im, i) => <Tile key={im.id} image={im} index={i} onOpen={onOpen} className={i % 2 ? 'right' : ''} />)}</div>
+      </div>
+    )
+  } else {
+    body = (
+      <div className="gl-trio">
+        {imgs.slice(0, 5).map((im, i) => <Tile key={im.id} image={im} index={i} onOpen={onOpen} d={i} className={`t${i + 1}`} />)}
+      </div>
+    )
+  }
 
   return (
-    <section
-      ref={sectionRef}
-      id={chapter.id}
-      className="scroll-mt-[130px] px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14"
-    >
-      <div className="mx-auto max-w-[1200px]">
-
-        <header className="mb-5 flex flex-col gap-3 sm:mb-6 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
-
-          <div>
-
-            <p className="mb-2 font-['Inter'] text-[12px] font-medium uppercase tracking-[0.2em] text-[#6B6F76]">
-              {chapter.number}
-            </p>
-
-            <MaskText
-              as="h2"
-              lines={[chapter.title]}
-              className="font-['Manrope'] text-[28px] font-medium leading-[40px] tracking-[-0.025em] text-[#1C1F26] lg:text-[34px]"
-            />
-
-          </div>
-
-          <p className="max-w-[420px] font-['Inter'] text-[14px] font-normal leading-[1.7] text-[#6B6F76] lg:text-right">
-            {chapter.description}
-          </p>
-
-        </header>
-
-        <div className="mb-6 lg:mb-8">
-          <HairLine />
-        </div>
-
-        <div className={`grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4 ${mirrored ? 'lg:grid-cols-[minmax(0,400fr)_minmax(0,780fr)]' : 'lg:grid-cols-[minmax(0,780fr)_minmax(0,400fr)]'} lg:gap-5`}>
-
-          {mirrored && tall && (
-            <ChapterImage
-              image={tall}
-              index={tallIndex}
-              onOpen={onOpen}
-            />
-          )}
-
-          {large && (
-            <ChapterImage
-              image={large}
-              index={largeIndex}
-              onOpen={onOpen}
-              parallax
-              priority={false}
-            />
-          )}
-
-          {!mirrored && tall && (
-            <ChapterImage
-              image={tall}
-              index={tallIndex}
-              onOpen={onOpen}
-            />
-          )}
-
-        </div>
-
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-4 lg:mt-5 lg:grid-cols-3 lg:gap-5">
-
-          {equalImages.map(
-            (image) => {
-              const index =
-                chapter.images.findIndex(
-                  (item) =>
-                    item.id ===
-                    image.id
-                )
-
-              return (
-                <ChapterImage
-                  key={image.id}
-                  image={image}
-                  index={index}
-                  onOpen={onOpen}
-                />
-              )
-            }
-          )}
-
-        </div>
-
+    <section ref={chapterRef} id={chapter.id} className={`gl-chapter gl-chapter--${layout}`}>
+      <div className="lx-wrap">
+        {head}
+        {body}
       </div>
     </section>
   )

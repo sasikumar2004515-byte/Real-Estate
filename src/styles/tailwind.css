@@ -1,0 +1,12 @@
+/* Utilities used by the gallery, lightbox and video player. No preflight, so the older CSS is untouched. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css";
+
+@keyframes filmSwapIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes filmPlayerIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@keyframes videoPlayerIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@keyframes filmPulse{0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,.5)}50%{box-shadow:0 0 0 14px rgba(201,169,110,0)}}
+@keyframes galleryHeroZoom{from{transform:scale(1)}to{transform:scale(1.07)}}
+@keyframes galleryScrollDot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(10px);opacity:1}}
+@keyframes imageShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes lightboxCaption{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}

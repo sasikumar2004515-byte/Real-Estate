@@ -1,67 +1,41 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-/**
- * MaskText - each line slides up inside an overflow-hidden mask.
- * Falls back to visible if IntersectionObserver is unavailable.
- */
 function MaskText({
-  as = 'div',
-  lines = [],
+  children,
+  className = '',
+  delay = 0,
   immediate = false,
-  className = ''
 }) {
-  const rootRef = useRef(null)
   const [visible, setVisible] = useState(immediate)
 
   useEffect(() => {
-    if (immediate) {
-      const frame = requestAnimationFrame(() => setVisible(true))
-      return () => cancelAnimationFrame(frame)
-    }
+    if (immediate) return
 
-    const element = rootRef.current
-    if (!element) return undefined
-
-    if (!('IntersectionObserver' in window)) {
+    const timer = setTimeout(() => {
       setVisible(true)
-      return undefined
-    }
+    }, delay)
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true)
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.15 }
-    )
-
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [immediate])
-
-  const Component = as
+    return () => clearTimeout(timer)
+  }, [delay, immediate])
 
   return (
-    <Component ref={rootRef} className={className}>
-      {lines.map((line, index) => (
-        <span
-          key={`${line}-${index}`}
-          className="block overflow-hidden pb-[0.12em]"
-        >
-          <span
-            className={[
-              'block transform-gpu transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]',
-              visible ? 'translate-y-0' : 'translate-y-[110%]'
-            ].join(' ')}
-            style={{ transitionDelay: `${index * 150}ms` }}
-          >
-            {line}
-          </span>
-        </span>
-      ))}
-    </Component>
+    <span
+      className={`block overflow-hidden ${className}`}
+      aria-label={typeof children === 'string' ? children : undefined}
+    >
+      <span
+        className="block transition-transform duration-1000"
+        style={{
+          transform: visible
+            ? 'translateY(0)'
+            : 'translateY(110%)',
+          transitionTimingFunction:
+            'cubic-bezier(0.22,1,0.36,1)',
+        }}
+      >
+        {children}
+      </span>
+    </span>
   )
 }
 

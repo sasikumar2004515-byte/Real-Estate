@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 
+import { setupMotion, setupProgress } from './scripts/motion'
+import { startSmoothScroll } from './scripts/smooth'
 import Home from './pages/Home'
 import About from './pages/About'
 import Projects from './pages/Projects'
@@ -9,30 +11,45 @@ import Gallery from './pages/Gallery'
 import Locations from './pages/Locations'
 import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
-import Privacy from './pages/Privacy'
-import Terms from './pages/Terms'
-import NotFound from './pages/NotFound'
-
-import AnimationManager from './components/AnimationManager'
 import FloatingActions from './components/FloatingActions'
-import CookieBanner from './components/CookieBanner'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    window.dispatchEvent(new CustomEvent('nx:scrollto', { detail: 0 }))
+  }, [pathname])
+
+  useEffect(() => {
+    startSmoothScroll()
+  }, [])
+
+  return null
+}
+
+function Motion() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    setupProgress()
+    const t = setTimeout(setupMotion, 60)
+    return () => clearTimeout(t)
   }, [pathname])
 
   return null
 }
 
 function AppRoutes() {
+  const { pathname } = useLocation()
+
   return (
     <>
       <ScrollToTop />
-      <AnimationManager />
+      <Motion />
+      <FloatingActions />
 
+      <div key={pathname} className="page-fade">
       <Routes>
         <Route
           path="/"
@@ -75,20 +92,11 @@ function AppRoutes() {
         />
 
         <Route
-          path="/privacy"
-          element={<Privacy />}
-        />
-
-        <Route
-          path="/terms"
-          element={<Terms />}
-        />
-
-        <Route
           path="*"
-          element={<NotFound />}
+          element={<Home />}
         />
       </Routes>
+      </div>
     </>
   )
 }
@@ -98,8 +106,6 @@ function App() {
     <BrowserRouter>
       <div className="app-shell">
         <AppRoutes />
-        <FloatingActions />
-        <CookieBanner />
       </div>
     </BrowserRouter>
   )

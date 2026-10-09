@@ -2,44 +2,38 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Seo from '../components/Seo'
+import Wave from '../components/Wave'
 import { projects } from '../data/site'
-import {
-  secondsUntilNextEnquiry,
-  submitEnquiry,
-  validateEnquiry,
-} from '../utils/enquiry'
 
 const galleryFallbacks = [
   '/images/projects/palm-grove.webp',
   '/images/projects/lakeside-residences.webp',
   '/images/projects/urban-heights.webp',
+  '/images/gallery/gallery-pool.webp',
 ]
 
-const defaultAmenities = [
-  '24/7 Security',
-  'Landscaped Open Spaces',
-  'Visitor Parking',
-  'Community Spaces',
+const defaultAmenities = ['24/7 Security', 'Landscaped Open Spaces', 'Visitor Parking', 'Community Spaces']
+
+const nearby = [
+  ['Schools', '⌂', 'Nearby schools and educational institutions'],
+  ['Hospitals', '✚', 'Nearby hospitals and healthcare facilities'],
+  ['Transport', '⇄', 'Major roads, public transport and connectivity'],
+  ['Business', '◈', 'Commercial areas, offices and everyday conveniences'],
 ]
 
-const locationGroups = [
-  {
-    title: 'Schools',
-    items: ['Nearby schools and educational institutions'],
-  },
-  {
-    title: 'Hospitals',
-    items: ['Nearby hospitals and healthcare facilities'],
-  },
-  {
-    title: 'Transport',
-    items: ['Major roads, public transport and connectivity'],
-  },
-  {
-    title: 'Business',
-    items: ['Commercial areas, offices and everyday conveniences'],
-  },
+const plans = [
+  ['2 BHK', 'Compact, efficient and well lit.'],
+  ['3 BHK', 'Balanced space for a growing family.'],
+  ['4 BHK', 'Generous rooms with room to entertain.'],
+]
+
+const sections = [
+  ['overview', 'Overview'],
+  ['gallery', 'Gallery'],
+  ['amenities', 'Amenities'],
+  ['plans', 'Plans'],
+  ['location', 'Location'],
+  ['enquire', 'Enquire'],
 ]
 
 function ProjectShowcase() {
@@ -48,1263 +42,383 @@ function ProjectShowcase() {
 
   const [activeImage, setActiveImage] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
-  const [planZoom, setPlanZoom] = useState(null)
   const [planType, setPlanType] = useState('floor')
   const [floorPlan, setFloorPlan] = useState(0)
   const [formStatus, setFormStatus] = useState('idle')
-  const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    visitDate: '',
-    message: '',
-  })
-
+  const [form, setForm] = useState({ name: '', phone: '', email: '', visitDate: '', message: '' })
+  const [here, setHere] = useState('overview')
   const today = new Date().toISOString().split('T')[0]
 
   const galleryImages = useMemo(() => {
     if (!project) return []
-
-    return [
-      project.image,
-      ...galleryFallbacks.filter((image) => image !== project.image),
-    ]
+    return [project.image, ...galleryFallbacks.filter((image) => image !== project.image)]
   }, [project])
 
   const amenities = useMemo(() => {
     if (!project) return []
-
-    return [
-      ...(project.highlights || []),
-      ...defaultAmenities,
-    ]
-      .filter(
-        (item, index, array) =>
-          item && array.indexOf(item) === index
-      )
+    return [...(project.highlights || []), ...defaultAmenities]
+      .filter((item, index, array) => item && array.indexOf(item) === index)
       .slice(0, 8)
   }, [project])
 
-  const similarProjects = useMemo(() => {
+  const similar = useMemo(() => {
     if (!project) return []
-
-    return projects
-      .filter(
-        (item) =>
-          item.id !== project.id &&
-          item.type === project.type
-      )
-      .slice(0, 3)
+    const same = projects.filter((p) => p.id !== project.id && p.type === project.type)
+    const rest = projects.filter((p) => p.id !== project.id && p.type !== project.type)
+    return [...same, ...rest].slice(0, 3)
   }, [project])
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'instant',
-    })
+    window.scrollTo(0, 0)
+    window.dispatchEvent(new CustomEvent('nx:scrollto', { detail: 0 }))
+    setActiveImage(0)
+    setFormStatus('idle')
+    setPlanType('floor')
+    setFloorPlan(0)
   }, [id])
 
   useEffect(() => {
-    if (!lightboxOpen) return
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        setLightboxOpen(false)
-      }
-
-      if (event.key === 'ArrowRight') {
-        setActiveImage(
-          (current) => (current + 1) % galleryImages.length
-        )
-      }
-
-      if (event.key === 'ArrowLeft') {
-        setActiveImage(
-          (current) =>
-            (current - 1 + galleryImages.length) %
-            galleryImages.length
-        )
-      }
+    if (!lightboxOpen) return undefined
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (event) => {
+      if (event.key === 'Escape') setLightboxOpen(false)
+      if (event.key === 'ArrowRight') setActiveImage((c) => (c + 1) % galleryImages.length)
+      if (event.key === 'ArrowLeft') setActiveImage((c) => (c - 1 + galleryImages.length) % galleryImages.length)
     }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () =>
-      window.removeEventListener(
-        'keydown',
-        handleKeyDown
-      )
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = previous
+    }
   }, [lightboxOpen, galleryImages.length])
+
+  // which section is under the sticky bar
+  useEffect(() => {
+    if (!project) return undefined
+    let ticking = false
+    const update = () => {
+      ticking = false
+      const line = window.innerHeight * 0.35
+      let cur = sections[0][0]
+      sections.forEach(([key]) => {
+        const el = document.getElementById(key)
+        if (el && el.getBoundingClientRect().top <= line) cur = key
+      })
+      setHere(cur)
+    }
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update) } }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    update()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [project])
+
+  const go = (key) => {
+    const el = document.getElementById(key)
+    if (!el) return
+    const offset = (document.querySelector('.nx-header')?.offsetHeight || 84) + 54
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset + 2, behavior: 'smooth' })
+  }
 
   const handleFormChange = (event) => {
     const { name, value } = event.target
-
-    setForm((current) => ({
-      ...current,
-      [name]: value,
-    }))
+    setForm((current) => ({ ...current, [name]: value }))
   }
 
-  const [formMessage, setFormMessage] = useState('')
-
-  useEffect(() => {
-    if (!planZoom) return undefined
-
-    const onKey = (event) => {
-      if (event.key === 'Escape') setPlanZoom(null)
-    }
-
-    document.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [planZoom])
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
-
-    // Honeypot filled = bot. Pretend success, send nothing.
-    if (event.currentTarget.elements.website?.value) {
-      setFormStatus('success')
-      return
-    }
-
-    const errors = validateEnquiry({
-      ...form,
-      consent: true, // consent notice is shown under the form
-    })
-    const firstError = Object.values(errors)[0]
-
-    if (firstError) {
-      setFormMessage(firstError)
+    if (!form.name.trim() || !form.phone.trim() || !form.email.trim()) {
       setFormStatus('error')
       return
     }
+    setFormStatus('success')
+  }
 
-    const wait = secondsUntilNextEnquiry()
-    if (wait > 0) {
-      setFormMessage(`Please wait ${wait} seconds before sending another enquiry.`)
-      setFormStatus('error')
-      return
-    }
-
-    setFormStatus('sending')
-
-    try {
-      await submitEnquiry({
-        project: project?.name,
-        name: form.name.trim(),
-        phone: form.phone.trim(),
-        email: form.email.trim(),
-        visitDate: form.visitDate,
-        message: form.message.trim(),
-        source: 'project-showcase',
-      })
-      setFormStatus('success')
-    } catch {
-      setFormMessage('Something went wrong. Please try again or call us directly.')
-      setFormStatus('error')
-    }
+  const askBrochure = () => {
+    setForm((c) => ({ ...c, message: `Please send me the brochure for ${project.name}.` }))
+    go('enquire')
   }
 
   if (!project) {
     return (
       <>
         <Header />
-
-        <main className="showcase-not-found">
-          <div>
-            <p className="section-eyebrow">
-              PROJECT NOT FOUND
-            </p>
-
-            <h1>Project unavailable</h1>
-
-            <p>
-              The project you are looking for could not
-              be found.
-            </p>
-
-            <Link
-              to="/projects"
-              className="button button-gold"
-            >
-              Back to Projects
-              <span>↗</span>
-            </Link>
+        <main className="ps ps-missing" data-own>
+          <div className="lx-wrap lx-center">
+            <p className="lx-kicker">Project not found</p>
+            <h1 className="lx-title lx-title--light">That project is <em>unavailable.</em></h1>
+            <p className="lx-lead lx-lead--light">The project you are looking for could not be found.</p>
+            <div className="lx-row" style={{ justifyContent: 'center', marginTop: 32 }}>
+              <Link to="/projects" className="lx-btn">Back to projects <i>→</i></Link>
+            </div>
           </div>
         </main>
-
         <Footer />
       </>
     )
   }
 
-  const currentImage =
-    galleryImages[activeImage] || project.image
+  const facts = [
+    ['Configuration', project.configuration],
+    ['Area', project.area],
+    ['Location', `${project.location}, Chennai`],
+    ['Starting price', project.price],
+  ]
+  const current = galleryImages[activeImage] || project.image
 
   return (
     <>
-      <Seo
-        title={`${project.name} in ${project.location}`}
-        description={project.description}
-        image={project.image}
-        path={`/projects/${project.id}`}
-      />
-
       <Header />
-
-      <main className="showcase-page">
-
-        {/* Hero */}
-
-        <section className="showcase-hero">
-          <img
-            src={project.image}
-            alt={`${project.name} exterior`}
-            width="2200"
-            height="1200"
-            fetchPriority="high"
-          />
-
-          <div className="showcase-hero-overlay" />
-
-          <div className="page-container showcase-hero-content">
-
-            <nav
-              className="showcase-breadcrumb reveal"
-              aria-label="Breadcrumb"
-            >
-              <Link to="/">Home</Link>
-
-              <span aria-hidden="true">/</span>
-
-              <Link to="/projects">
-                Projects
-              </Link>
-
-              <span aria-hidden="true">/</span>
-
-              <span>{project.name}</span>
-            </nav>
-
-            <div className="showcase-hero-copy reveal">
-
-              <span className="showcase-status">
-                {project.status}
-              </span>
-
-              <p className="section-eyebrow">
-                {project.location} · {project.type}
-              </p>
-
-              <h1>{project.name}</h1>
-
-              <p className="showcase-hero-description">
-                {project.description}
-              </p>
-
-              <div className="showcase-hero-actions">
-
-                <a
-                  href="#enquire"
-                  className="button button-gold"
-                >
-                  Enquire Now
-                  <span>↗</span>
-                </a>
-
-                <a
-                  href="#overview"
-                  className="button button-light-outline"
-                >
-                  Explore Project
-                  <span>↓</span>
-                </a>
-
-              </div>
-            </div>
-          </div>
-
-          <div className="showcase-hero-meta">
-
-            <div className="showcase-meta-item">
-              <span>CONFIGURATION</span>
-              <strong>
-                {project.configuration}
-              </strong>
-            </div>
-
-            <div className="showcase-meta-item">
-              <span>AREA</span>
-              <strong>{project.area}</strong>
-            </div>
-
-            <div className="showcase-meta-item">
-              <span>STARTING FROM</span>
-              <strong>{project.price}</strong>
-            </div>
-
-            <div className="showcase-meta-item">
-              <span>STATUS</span>
-              <strong>{project.status}</strong>
-            </div>
-
+      <main className="ps" data-own>
+        {/* hero */}
+        <section className="lx-hero ps-hero">
+          <img src={project.image} alt={project.name} fetchPriority="high" />
+          <div className="lx-wrap">
+            <Wave className="lx-crumbs"><Link to="/">Home</Link><span>/</span><Link to="/projects">Projects</Link><span>/</span><span>{project.name}</span></Wave>
+            <Wave d={1} className="ps-badges"><span className="ps-badge">{project.status}</span><span>{project.location} · {project.type}</span></Wave>
+            <Wave d={2} as="h1">{project.name}</Wave>
+            <Wave d={3} as="p" className="lx-sub">{project.description}</Wave>
+            <Wave d={4} className="lx-row">
+              <button type="button" className="lx-btn" onClick={() => go('enquire')}>Book a site visit <i>→</i></button>
+              <button type="button" className="lx-btn lx-btn--ghost" onClick={() => go('overview')}>View overview</button>
+            </Wave>
+            <Wave d={5} as="dl" className="ps-facts">
+              {facts.map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+            </Wave>
           </div>
         </section>
 
+        {/* sticky nav */}
+        <nav className="gl-bar ps-bar" aria-label="Project sections">
+          <div className="gl-bar-in" data-native-scroll>
+            {sections.map(([key, label], i) => (
+              <button key={key} type="button" className={here === key ? 'on' : ''} onClick={() => go(key)}><i>{String(i + 1).padStart(2, '0')}</i>{label}</button>
+            ))}
+            <span aria-hidden="true" />
+            <button type="button" onClick={() => go('enquire')}><i>→</i>Enquire now</button>
+          </div>
+        </nav>
 
-        {/* Overview */}
-
-        <section
-          id="overview"
-          className="showcase-overview section-padding"
-        >
-          <div className="page-container">
-
-            <div className="showcase-overview-grid">
-
-              <div className="reveal">
-
-                <p className="section-eyebrow">
-                  PROJECT OVERVIEW
-                </p>
-
-                <h2>
-                  A residence{' '}
-                  <span>
-                    designed around you.
-                  </span>
-                </h2>
-
+        {/* overview */}
+        <section className="lx-section lx-section--ivory" id="overview">
+          <div className="lx-wrap ps-over">
+            <Wave kind="left">
+              <p className="lx-kicker lx-kicker--dark">Overview</p>
+              <h2 className="lx-title">A home designed <em>around you.</em></h2>
+              <p className="lx-lead">{project.description} Every detail, from the approach to the finishes, is planned for comfort, light and long-term value.</p>
+              <div className="lx-row" style={{ marginTop: 30 }}>
+                <button type="button" className="lx-btn lx-btn--dark" onClick={askBrochure}>Request brochure <i>↓</i></button>
+                <Link to="/locations" className="lx-btn lx-btn--line">View locations</Link>
               </div>
-
-              <div className="showcase-overview-copy reveal">
-
-                <p className="showcase-lead">
-                  {project.description}
-                </p>
-
-                <p>
-                  {project.name} brings together
-                  considered spaces, contemporary
-                  architecture and practical amenities
-                  within a well-connected neighbourhood.
-                </p>
-
-                <p>
-                  Every detail is planned to create a
-                  comfortable residential experience
-                  for modern families.
-                </p>
-
-              </div>
-
+            </Wave>
+            <div className="ps-over-cards">
+              {facts.map(([k, v], i) => (
+                <Wave d={i} key={k} className="ps-fact"><small>{k}</small><b>{v}</b></Wave>
+              ))}
+              <Wave d={4} className="ps-fact ps-fact--wide"><small>Status</small><b>{project.status}</b><span>Talk to the team for current availability.</span></Wave>
             </div>
-
-            <div className="showcase-overview-facts reveal">
-
-              <div className="showcase-fact">
-                <span>LOCATION</span>
-                <strong>{project.location}</strong>
-              </div>
-
-              <div className="showcase-fact">
-                <span>PROPERTY TYPE</span>
-                <strong>{project.type}</strong>
-              </div>
-
-              <div className="showcase-fact">
-                <span>CONFIGURATION</span>
-                <strong>{project.configuration}</strong>
-              </div>
-
-              <div className="showcase-fact">
-                <span>STATUS</span>
-                <strong>{project.status}</strong>
-              </div>
-
-            </div>
-
           </div>
         </section>
 
-
-        {/* Gallery */}
-
-        <section
-          id="gallery"
-          className="showcase-gallery section-padding"
-        >
-          <div className="page-container">
-
-            <div className="showcase-gallery-heading reveal">
-
+        {/* gallery */}
+        <section className="lx-section lx-section--navy" id="gallery">
+          <div className="lx-wrap">
+            <Wave className="ps-head">
               <div>
-                <p className="section-eyebrow">
-                  VISUAL STORY
-                </p>
-
-                <h2>
-                  See the{' '}
-                  <span>possibility.</span>
-                </h2>
+                <p className="lx-kicker">Gallery</p>
+                <h2 className="lx-title lx-title--light">See the <em>space.</em></h2>
               </div>
-
-              <span className="showcase-gallery-count">
-                {String(galleryImages.length).padStart(2, '0')}
-                {' '}
-                IMAGES
-              </span>
-
-            </div>
-
-            <div className="showcase-gallery-grid">
-
-              <button
-                type="button"
-                className="showcase-gallery-main reveal"
-                onClick={() => {
-                  setActiveImage(0)
-                  setLightboxOpen(true)
-                }}
-                aria-label={`View ${project.name} gallery image`}
-              >
-                <img
-                  src={galleryImages[0]}
-                  alt={`${project.name} exterior`}
-                  width="1400"
-                  height="900"
-                />
-
-                <span>01</span>
+              <span className="pj-counter">{String(activeImage + 1).padStart(2, '0')} <i /> {String(galleryImages.length).padStart(2, '0')}</span>
+            </Wave>
+            <Wave d={1} className="ps-gal">
+              <button type="button" className="ps-gal-main" onClick={() => setLightboxOpen(true)} aria-label="Open image full screen">
+                <img key={current} src={current} alt={`${project.name} view ${activeImage + 1}`} />
+                <span>View full screen ↗</span>
               </button>
-
-              <div className="showcase-gallery-side">
-
-                {galleryImages
-                  .slice(1, 3)
-                  .map((image, index) => (
-                    <button
-                      type="button"
-                      className="showcase-gallery-small reveal"
-                      key={image}
-                      onClick={() => {
-                        setActiveImage(index + 1)
-                        setLightboxOpen(true)
-                      }}
-                      aria-label={`View gallery image ${
-                        index + 2
-                      }`}
-                    >
-                      <img
-                        src={image}
-                        alt={`${project.name} ${
-                          index === 0
-                            ? 'residence'
-                            : 'lifestyle'
-                        }`}
-                        width="900"
-                        height="600"
-                        loading="lazy"
-                      />
-
-                      <span>
-                        {String(index + 2).padStart(
-                          2,
-                          '0'
-                        )}
-                      </span>
-                    </button>
-                  ))}
-
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* Highlights */}
-
-        <section className="showcase-highlights section-padding">
-          <div className="page-container">
-
-            <div className="showcase-highlights-grid">
-
-              <div className="showcase-highlights-content reveal">
-
-                <p className="section-eyebrow">
-                  PROJECT HIGHLIGHTS
-                </p>
-
-                <h2>
-                  Details that{' '}
-                  <span>make a difference.</span>
-                </h2>
-
-                <p>
-                  Carefully planned features that make
-                  everyday living more comfortable and
-                  convenient.
-                </p>
-
-              </div>
-
-              <div className="showcase-highlight-list">
-
-                {(project.highlights || [])
-                  .slice(0, 8)
-                  .map((highlight, index) => (
-                    <div
-                      className="showcase-highlight-item reveal"
-                      key={highlight}
-                    >
-                      <span className="showcase-highlight-number">
-                        {String(index + 1).padStart(
-                          2,
-                          '0'
-                        )}
-                      </span>
-
-                      <strong>{highlight}</strong>
-                    </div>
-                  ))}
-
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* Amenities */}
-
-        <section
-          id="amenities"
-          className="showcase-amenities section-padding"
-        >
-          <div className="page-container">
-
-            <div className="showcase-amenities-grid">
-
-              <div className="showcase-amenity-list">
-
-                {amenities.map((amenity, index) => (
-                  <article
-                    className="showcase-amenity reveal"
-                    key={amenity}
-                  >
-                    <span className="showcase-amenity-number">
-                      {String(index + 1).padStart(
-                        2,
-                        '0'
-                      )}
-                    </span>
-
-                    <strong>{amenity}</strong>
-                  </article>
-                ))}
-
-              </div>
-
-              <div className="showcase-amenities-content reveal">
-
-                <p className="section-eyebrow">
-                  AMENITIES
-                </p>
-
-                <h2>
-                  Designed for{' '}
-                  <span>everyday life.</span>
-                </h2>
-
-                <p>
-                  Spaces and facilities created around
-                  comfort, convenience and community.
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* Plans */}
-
-        <section
-          id="plans"
-          className="showcase-plans section-padding"
-        >
-          <div className="page-container">
-
-            <div className="showcase-plans-heading reveal">
-
-              <p className="section-eyebrow">
-                PLANS
-              </p>
-
-              <h2>
-                Understand the{' '}
-                <span>space.</span>
-              </h2>
-
-            </div>
-
-            <div className="showcase-plan-switcher">
-
-              <button
-                type="button"
-                className={
-                  planType === 'floor'
-                    ? 'is-active'
-                    : ''
-                }
-                onClick={() => setPlanType('floor')}
-              >
-                Floor Plans
-              </button>
-
-              <button
-                type="button"
-                className={
-                  planType === 'master'
-                    ? 'is-active'
-                    : ''
-                }
-                onClick={() => setPlanType('master')}
-              >
-                Master Plan
-              </button>
-
-            </div>
-
-            <div className="showcase-plans-grid">
-
-              {planType === 'floor' ? (
-                <>
-                  <article className="showcase-plan-card reveal">
-
-                    <div className="showcase-plan-heading">
-
-                      <div>
-                        <p className="section-eyebrow">
-                          FLOOR PLAN
-                        </p>
-
-                        <h3>
-                          Thoughtfully planned
-                          spaces.
-                        </h3>
-                      </div>
-
-                      <span>01</span>
-
-                    </div>
-
-                    <button
-                      type="button"
-                      className="plan-image-button"
-                      onClick={() =>
-                        setPlanZoom({
-                          src: '/images/projects/floor-plan.webp',
-                          alt: 'Illustrative 3 BHK floor plan',
-                        })
-                      }
-                      aria-label="Enlarge floor plan"
-                    >
-                      <img
-                        src="/images/projects/floor-plan.webp"
-                        alt="Illustrative 3 BHK floor plan with room dimensions"
-                        loading="lazy"
-                        width="1920"
-                        height="1072"
-                      />
-                      <span className="plan-image-hint">Click to enlarge</span>
-                    </button>
-
-                    <p className="plan-image-note">
-                      Illustrative layout. Final approved plans are shared during enquiry.
-                    </p>
-
-                  </article>
-
-                  <article className="showcase-plan-card reveal">
-
-                    <div className="showcase-plan-heading">
-
-                      <div>
-                        <p className="section-eyebrow">
-                          PLAN TYPE
-                        </p>
-
-                        <h3>
-                          Explore layouts.
-                        </h3>
-                      </div>
-
-                      <span>02</span>
-
-                    </div>
-
-                    <div className="plan-selector">
-
-                      {[
-                        '2 BHK',
-                        '3 BHK',
-                        '4 BHK',
-                      ].map((item, index) => (
-                        <button
-                          type="button"
-                          key={item}
-                          className={
-                            floorPlan === index
-                              ? 'is-active'
-                              : ''
-                          }
-                          onClick={() =>
-                            setFloorPlan(index)
-                          }
-                        >
-                          {item}
-                        </button>
-                      ))}
-
-                    </div>
-
-                    <div className="plan-detail">
-
-                      <span>SELECTED CONFIGURATION</span>
-
-                      <strong>
-                        {[
-                          '2 BHK',
-                          '3 BHK',
-                          '4 BHK',
-                        ][floorPlan]}
-                      </strong>
-
-                      <p>
-                        Detailed dimensions and
-                        approved floor plan can be
-                        provided during enquiry.
-                      </p>
-
-                    </div>
-
-                  </article>
-                </>
-              ) : (
-                <article className="showcase-plan-card reveal">
-
-                  <div className="showcase-plan-heading">
-
-                    <div>
-                      <p className="section-eyebrow">
-                        MASTER PLAN
-                      </p>
-
-                      <h3>
-                        A community planned
-                        with purpose.
-                      </h3>
-                    </div>
-
-                    <span>01</span>
-
-                  </div>
-
-                  <button
-                    type="button"
-                    className="plan-image-button"
-                    onClick={() =>
-                      setPlanZoom({
-                        src: '/images/projects/master-plan.webp',
-                        alt: 'Illustrative community master plan',
-                      })
-                    }
-                    aria-label="Enlarge master plan"
-                  >
-                    <img
-                      src="/images/projects/master-plan.webp"
-                      alt="Illustrative community master plan with amenities and key"
-                      loading="lazy"
-                      width="1920"
-                      height="1072"
-                    />
-                    <span className="plan-image-hint">Click to enlarge</span>
+              <div className="ps-gal-thumbs">
+                {galleryImages.map((image, index) => (
+                  <button key={image} type="button" className={index === activeImage ? 'on' : ''} onClick={() => setActiveImage(index)} aria-label={`Show image ${index + 1}`}>
+                    <img src={image} alt="" loading="lazy" />
                   </button>
-
-                  <p className="plan-image-note">
-                    Illustrative master plan. Layout and amenities are subject to final approvals.
-                  </p>
-
-                </article>
-              )}
-
-            </div>
-
-          </div>
-        </section>
-
-
-        {/* Location */}
-
-        <section
-          id="location"
-          className="showcase-location section-padding"
-        >
-          <div className="page-container">
-
-            <div className="section-heading reveal">
-
-              <p className="section-eyebrow">
-                LOCATION
-              </p>
-
-              <h2>
-                Connected to{' '}
-                <span>what matters.</span>
-              </h2>
-
-            </div>
-
-            <div className="showcase-location-grid">
-
-              <div className="showcase-location-map reveal">
-                <iframe
-                  title={`${project.name} location map`}
-                  src={`https://www.google.com/maps?q=${encodeURIComponent(
-                    project.location
-                  )}&output=embed`}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              </div>
-
-              <div className="showcase-location-info reveal">
-
-                <h3>
-                  Nearby conveniences
-                </h3>
-
-                {locationGroups.map((group) => (
-                  <div
-                    className="showcase-location-group"
-                    key={group.title}
-                  >
-                    <span>{group.title}</span>
-
-                    {group.items.map((item) => (
-                      <p key={item}>{item}</p>
-                    ))}
-                  </div>
                 ))}
-
               </div>
-
-            </div>
-
+            </Wave>
           </div>
         </section>
 
+        {/* amenities */}
+        <section className="lx-section lx-section--stone" id="amenities">
+          <div className="lx-wrap">
+            <Wave className="lx-center">
+              <p className="lx-kicker lx-kicker--dark">Amenities</p>
+              <h2 className="lx-title">Everything <em>within reach.</em></h2>
+            </Wave>
+            <div className="ps-amen">
+              {amenities.map((item, i) => (
+                <Wave d={i % 4} key={item} className="ps-amen-item">
+                  <span>{String(i + 1).padStart(2, '0')}</span>
+                  <b>{item}</b>
+                  <i aria-hidden="true">✦</i>
+                </Wave>
+              ))}
+            </div>
+          </div>
+        </section>
 
-        {/* Brochure */}
-
-        <section className="showcase-download section-padding">
-          <div className="page-container">
-
-            <div className="showcase-download-card reveal">
-
+        {/* plans */}
+        <section className="lx-section lx-section--ivory" id="plans">
+          <div className="lx-wrap">
+            <Wave className="ps-head ps-head--dark">
               <div>
-
-                <p className="section-eyebrow">
-                  PROJECT BROCHURE
-                </p>
-
-                <h2>
-                  Take the project
-                  <br />
-                  <span>with you.</span>
-                </h2>
-
-                <p>
-                  Download the detailed project
-                  brochure for specifications,
-                  configurations and project information.
-                </p>
-
+                <p className="lx-kicker lx-kicker--dark">Plans</p>
+                <h2 className="lx-title">Understand <em>the space.</em></h2>
               </div>
+              <div className="ps-switch" role="tablist">
+                <button type="button" className={planType === 'floor' ? 'on' : ''} onClick={() => setPlanType('floor')}>Floor plans</button>
+                <button type="button" className={planType === 'master' ? 'on' : ''} onClick={() => setPlanType('master')}>Master plan</button>
+              </div>
+            </Wave>
 
-              <a
-                href={`/brochures/${project.id}.pdf`}
-                download={`${project.name.replace(/\s+/g, '-')}-Brochure.pdf`}
-                className="button button-gold"
-              >
-                Download Brochure
-                <span>↓</span>
-              </a>
-
-            </div>
-
+            {planType === 'floor' ? (
+              <div className="ps-plan" key="floor">
+                <div className="ps-plan-img"><img src="/images/projects/floor-plan.webp" alt="Sample floor plan" loading="lazy" /></div>
+                <div className="ps-plan-side">
+                  <p className="lx-kicker lx-kicker--dark">Plan type</p>
+                  <div className="ps-plan-tabs">
+                    {plans.map(([name], i) => <button key={name} type="button" className={i === floorPlan ? 'on' : ''} onClick={() => setFloorPlan(i)}>{name}</button>)}
+                  </div>
+                  <h3>{plans[floorPlan][0]}</h3>
+                  <p>{plans[floorPlan][1]}</p>
+                  <p className="ps-plan-note">Detailed dimensions and the approved floor plan can be provided during enquiry.</p>
+                  <button type="button" className="lx-btn lx-btn--dark lx-btn--sm" onClick={() => go('enquire')}>Ask for the plan <i>→</i></button>
+                </div>
+              </div>
+            ) : (
+              <div className="ps-plan" key="master">
+                <div className="ps-plan-img"><img src="/images/projects/master-plan.webp" alt="Master plan of the community" loading="lazy" /></div>
+                <div className="ps-plan-side">
+                  <p className="lx-kicker lx-kicker--dark">Master plan</p>
+                  <h3>A community planned with purpose.</h3>
+                  <p>Roads, green spaces and shared amenities are laid out together, so the whole neighbourhood works as well as each home.</p>
+                  <button type="button" className="lx-btn lx-btn--dark lx-btn--sm" onClick={() => go('enquire')}>Request details <i>→</i></button>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
-
-        {/* Similar Projects */}
-
-        {similarProjects.length > 0 && (
-          <section className="showcase-similar section-padding">
-
-            <div className="page-container">
-
-              <div className="showcase-similar-heading reveal">
-
-                <div>
-                  <p className="section-eyebrow">
-                    YOU MAY ALSO LIKE
-                  </p>
-
-                  <h2>
-                    Explore similar{' '}
-                    <span>projects.</span>
-                  </h2>
-                </div>
-
-                <Link
-                  to="/projects"
-                  className="text-link"
-                >
-                  View All
-                  <span>↗</span>
-                </Link>
-
+        {/* location */}
+        <section className="lx-section lx-section--navy" id="location">
+          <div className="lx-wrap">
+            <Wave className="ps-head">
+              <div>
+                <p className="lx-kicker">Location</p>
+                <h2 className="lx-title lx-title--light">{project.location}, <em>Chennai.</em></h2>
               </div>
-
-              <div className="showcase-similar-grid">
-
-                {similarProjects.map((item) => (
-                  <Link
-                    to={`/projects/${item.id}`}
-                    className="showcase-similar-card reveal"
-                    key={item.id}
-                  >
-                    <div className="showcase-similar-image">
-
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        width="900"
-                        height="650"
-                        loading="lazy"
-                      />
-
-                    </div>
-
-                    <div className="showcase-similar-content">
-
-                      <span>
-                        {item.location}
-                      </span>
-
-                      <h3>{item.name}</h3>
-
-                      <p>
-                        {item.configuration}
-                      </p>
-
-                    </div>
-                  </Link>
+              <a className="lx-btn lx-btn--sm" target="_blank" rel="noreferrer" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(project.name + ' ' + project.location + ' Chennai')}`}>Open in Maps <i>↗</i></a>
+            </Wave>
+            <div className="ps-loc">
+              <Wave kind="left" className="ps-map">
+                <iframe title={`Map of ${project.name}`} src={`https://www.google.com/maps?q=${encodeURIComponent(project.location + ', Chennai, Tamil Nadu')}&z=13&output=embed`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
+              </Wave>
+              <div className="ps-near">
+                {nearby.map(([t, icon, text], i) => (
+                  <Wave d={i} key={t} className="ps-near-item"><span>{icon}</span><div><b>{t}</b><small>{text}</small></div></Wave>
                 ))}
-
               </div>
-
             </div>
+          </div>
+        </section>
 
+        {/* enquire */}
+        <section className="lx-section lx-section--ivory" id="enquire">
+          <div className="lx-wrap ps-enq">
+            <Wave kind="left" className="ps-enq-copy">
+              <p className="lx-kicker lx-kicker--dark">Enquire</p>
+              <h2 className="lx-title">Book a visit to <em>{project.name}.</em></h2>
+              <p className="lx-lead">Choose a date and our team will walk you through the home, the plans and the neighbourhood.</p>
+              <ul>
+                <li>Private walkthrough with the team</li>
+                <li>Plans, pricing and availability</li>
+                <li>No obligation</li>
+              </ul>
+            </Wave>
+            <Wave kind="right" className="ct-card ps-form">
+              {formStatus === 'success' ? (
+                <div className="ct-done">
+                  <span className="ct-tick">✓</span>
+                  <p className="lx-kicker">Request received</p>
+                  <h3>Thank you. <em>We will be in touch.</em></h3>
+                  <p>Our team will contact you about {project.name} shortly.</p>
+                  <button type="button" className="lx-btn lx-btn--dark" onClick={() => { setFormStatus('idle'); setForm({ name: '', phone: '', email: '', visitDate: '', message: '' }) }}>Send another request <i>→</i></button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} noValidate>
+                  <p className="lx-kicker">Site visit request</p>
+                  <h3>Tell us <em>when.</em></h3>
+                  <div className="ct-two" style={{ marginTop: 22 }}>
+                    <label><input name="name" value={form.name} onChange={handleFormChange} placeholder=" " autoComplete="name" /><span>Full name *</span></label>
+                    <label><input name="phone" type="tel" value={form.phone} onChange={handleFormChange} placeholder=" " autoComplete="tel" /><span>Phone *</span></label>
+                  </div>
+                  <div className="ct-two">
+                    <label><input name="email" type="email" value={form.email} onChange={handleFormChange} placeholder=" " autoComplete="email" /><span>Email *</span></label>
+                    <label><input name="visitDate" type="date" min={today} value={form.visitDate} onChange={handleFormChange} placeholder=" " /><span>Preferred date</span></label>
+                  </div>
+                  <label><textarea name="message" rows="4" value={form.message} onChange={handleFormChange} placeholder=" " /><span>Message</span></label>
+                  {formStatus === 'error' && <p className="ps-err" role="alert">Please fill in your name, phone and email.</p>}
+                  <button type="submit" className="lx-btn ct-send">Request a visit <i>→</i></button>
+                  <small className="ct-note">Your details are used only to respond to your enquiry.</small>
+                </form>
+              )}
+            </Wave>
+          </div>
+        </section>
+
+        {/* similar */}
+        {similar.length > 0 && (
+          <section className="lx-section pj-all ps-similar">
+            <div className="lx-wrap">
+              <Wave className="pj-head pj-head--dark">
+                <div>
+                  <p className="lx-kicker">You may also like</p>
+                  <h2 className="lx-title lx-title--light">Similar <em>residences.</em></h2>
+                </div>
+                <Link to="/projects" className="lx-btn lx-btn--ghost lx-btn--sm">All projects <i>→</i></Link>
+              </Wave>
+              <div className="pj-grid">
+                {similar.map((p, i) => (
+                  <Wave d={i} key={p.id} className="pj-card-wrap">
+                    <Link to={`/projects/${p.id}`} className="pj-card">
+                      <img src={p.image} alt={p.name} loading="lazy" />
+                      <span className="pj-card-badge">{p.status}</span>
+                      <span className="pj-card-price">{p.price}</span>
+                      <div className="pj-card-body">
+                        <p>{p.location} · {p.type}</p>
+                        <h3>{p.name}</h3>
+                        <div className="pj-card-more">
+                          <div><span>{p.configuration}</span><span>{p.area}</span></div>
+                          <span className="lx-btn lx-btn--sm">View <i>→</i></span>
+                        </div>
+                      </div>
+                    </Link>
+                  </Wave>
+                ))}
+              </div>
+            </div>
           </section>
         )}
-
-
-        {/* Enquiry */}
-
-        <section
-          id="enquire"
-          className="showcase-enquiry section-padding"
-        >
-          <div className="page-container">
-
-            <div className="showcase-enquiry-content">
-
-              <p className="section-eyebrow">
-                ENQUIRE ABOUT THIS PROJECT
-              </p>
-
-              <h2>
-                Let's find your{' '}
-                <span>next address.</span>
-              </h2>
-
-              <p>
-                Share your details and our team can
-                help you with project information,
-                availability and a site visit.
-              </p>
-
-              <form
-                className="showcase-enquiry-form"
-                onSubmit={handleSubmit}
-                noValidate
-              >
-
-                <input
-                  type="text"
-                  name="website"
-                  tabIndex="-1"
-                  autoComplete="off"
-                  aria-hidden="true"
-                  className="showcase-honeypot"
-                />
-
-                <div className="showcase-form-grid">
-
-                  <div className="form-group">
-                    <label htmlFor="project-name">
-                      Name
-                    </label>
-
-                    <input
-                      id="project-name"
-                      type="text"
-                      name="name"
-                      value={form.name}
-                      onChange={handleFormChange}
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="project-phone">
-                      Phone
-                    </label>
-
-                    <input
-                      id="project-phone"
-                      type="tel"
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleFormChange}
-                      placeholder="Your phone number"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="project-email">
-                      Email
-                    </label>
-
-                    <input
-                      id="project-email"
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleFormChange}
-                      placeholder="Your email"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="project-interest">
-                      Interested Project
-                    </label>
-
-                    <input
-                      id="project-interest"
-                      type="text"
-                      value={project.name}
-                      readOnly
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="project-date">
-                      Preferred Visit Date
-                    </label>
-
-                    <input
-                      id="project-date"
-                      type="date"
-                      name="visitDate"
-                      min={today}
-                      value={form.visitDate}
-                      onChange={handleFormChange}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="project-message">
-                      Message
-                    </label>
-
-                    <textarea
-                      id="project-message"
-                      name="message"
-                      value={form.message}
-                      onChange={handleFormChange}
-                      placeholder="Tell us how we can help"
-                      rows="5"
-                    />
-                  </div>
-
-                </div>
-
-                {formStatus === 'error' && (
-                  <p
-                    className="showcase-form-message showcase-form-message--error"
-                    role="alert"
-                  >
-                    {formMessage}
-                  </p>
-                )}
-
-                {formStatus === 'success' && (
-                  <p
-                    className="showcase-form-message showcase-form-message--success"
-                    role="status"
-                  >
-                    Thank you. Your enquiry has been
-                    received.
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  className="button button-gold"
-                  disabled={
-                    formStatus === 'success' ||
-                    formStatus === 'sending'
-                  }
-                >
-                  {formStatus === 'success'
-                    ? 'Enquiry Submitted'
-                    : formStatus === 'sending'
-                      ? 'Sending...'
-                      : 'Submit Enquiry'}
-                  <span>↗</span>
-                </button>
-
-                <small className="form-note">
-                  By submitting you agree to be contacted. See our{' '}
-                  <Link to="/privacy">Privacy Policy</Link>.
-                </small>
-
-              </form>
-
-            </div>
-
-          </div>
-        </section>
-
       </main>
-
       <Footer />
 
-      {planZoom && (
-        <div
-          className="plan-zoom"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Enlarged plan"
-          onClick={() => setPlanZoom(null)}
-        >
-          <button
-            type="button"
-            className="plan-zoom-close"
-            aria-label="Close enlarged plan"
-            onClick={() => setPlanZoom(null)}
-          >
-            ×
-          </button>
-          <img src={planZoom.src} alt={planZoom.alt} onClick={(event) => event.stopPropagation()} />
-        </div>
-      )}
-
-      {/* Lightbox */}
-
       {lightboxOpen && (
-        <div
-          className="lightbox is-open"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${project.name} gallery`}
-          onClick={() => setLightboxOpen(false)}
-        >
-          <div
-            className="lightbox-content"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
-          >
-
-            <button
-              type="button"
-              className="lightbox-close"
-              onClick={() =>
-                setLightboxOpen(false)
-              }
-              aria-label="Close gallery"
-            >
-              ×
-            </button>
-
-            <button
-              type="button"
-              className="lightbox-prev"
-              onClick={() =>
-                setActiveImage(
-                  (current) =>
-                    (current - 1 + galleryImages.length) %
-                    galleryImages.length
-                )
-              }
-              aria-label="Previous image"
-            >
-              ←
-            </button>
-
-            <img
-              src={currentImage}
-              alt={`${project.name} gallery`}
-            />
-
-            <button
-              type="button"
-              className="lightbox-next"
-              onClick={() =>
-                setActiveImage(
-                  (current) =>
-                    (current + 1) %
-                    galleryImages.length
-                )
-              }
-              aria-label="Next image"
-            >
-              →
-            </button>
-
-          </div>
+        <div className="ps-lb" role="dialog" aria-modal="true" aria-label="Project gallery" onClick={() => setLightboxOpen(false)}>
+          <button type="button" className="ps-lb-x" aria-label="Close" onClick={() => setLightboxOpen(false)}>×</button>
+          <button type="button" className="ps-lb-n ps-lb-prev" aria-label="Previous image" onClick={(e) => { e.stopPropagation(); setActiveImage((c) => (c - 1 + galleryImages.length) % galleryImages.length) }}>←</button>
+          <img src={current} alt={`${project.name} view ${activeImage + 1}`} onClick={(e) => e.stopPropagation()} />
+          <button type="button" className="ps-lb-n ps-lb-next" aria-label="Next image" onClick={(e) => { e.stopPropagation(); setActiveImage((c) => (c + 1) % galleryImages.length) }}>→</button>
+          <span className="ps-lb-count">{activeImage + 1} / {galleryImages.length}</span>
         </div>
       )}
-
     </>
   )
 }
