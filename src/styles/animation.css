@@ -1,0 +1,646 @@
+:root {
+  --animation-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --animation-duration: 0.6s;
+}
+
+html.js [data-animate] {
+  opacity: 0;
+  transition:
+    opacity var(--animation-duration) var(--animation-ease),
+    transform var(--animation-duration) var(--animation-ease);
+}
+
+html.js [data-animate='fade-up'] {
+  transform: translateY(24px);
+}
+
+html.js [data-animate='fade-in'] {
+  transform: none;
+}
+
+html.js [data-animate='fade-left'] {
+  transform: translateX(24px);
+}
+
+html.js [data-animate='fade-right'] {
+  transform: translateX(-24px);
+}
+
+html.js [data-animate='zoom-in'] {
+  transform: scale(0.96);
+}
+
+html.js [data-animate].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+html.js [data-delay='1'] {
+  transition-delay: 0.1s;
+}
+
+html.js [data-delay='2'] {
+  transition-delay: 0.2s;
+}
+
+html.js [data-delay='3'] {
+  transition-delay: 0.3s;
+}
+
+html.js [data-delay='4'] {
+  transition-delay: 0.4s;
+}
+
+html.js [data-delay='5'] {
+  transition-delay: 0.5s;
+}
+
+html.js [data-stagger] > [data-animate] {
+  transition-delay: 0s;
+}
+
+html.js [data-stagger].is-visible > [data-animate]:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+html.js [data-stagger].is-visible > [data-animate]:nth-child(2) {
+  transition-delay: 0.2s;
+}
+
+html.js [data-stagger].is-visible > [data-animate]:nth-child(3) {
+  transition-delay: 0.3s;
+}
+
+html.js [data-stagger].is-visible > [data-animate]:nth-child(4) {
+  transition-delay: 0.4s;
+}
+
+html.js [data-stagger].is-visible > [data-animate]:nth-child(5) {
+  transition-delay: 0.5s;
+}
+
+html.js [data-stagger].is-visible > [data-animate]:nth-child(6) {
+  transition-delay: 0.6s;
+}
+
+html.js [data-stagger].is-visible > [data-animate]:nth-child(n + 7) {
+  transition-delay: 0.7s;
+}
+
+.home-hero,
+.hero {
+  overflow: hidden;
+}
+
+.home-hero-slide img,
+.hero-background {
+  transform: scale(1);
+}
+
+.home-hero-slide.active img,
+.hero.is-loaded .hero-background {
+  animation: hero-background-zoom 15s ease-out forwards;
+}
+
+@keyframes hero-background-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.08);
+  }
+}
+
+html.js .home-hero [data-hero-animate] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s var(--animation-ease),
+    transform 0.6s var(--animation-ease);
+}
+
+.home-hero.is-loaded [data-hero-animate] {
+  opacity: 1;
+  transform: none;
+}
+
+.home-hero.is-loaded [data-hero-animate='2'] {
+  transition-delay: 0.1s;
+}
+
+.home-hero.is-loaded [data-hero-animate='3'] {
+  transition-delay: 0.2s;
+}
+
+.home-hero.is-loaded [data-hero-animate='4'] {
+  transition-delay: 0.3s;
+}
+
+html.js .page-banner [data-banner-title] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s var(--animation-ease),
+    transform 0.6s var(--animation-ease);
+}
+
+.page-banner.is-loaded [data-banner-title] {
+  opacity: 1;
+  transform: none;
+}
+
+.site-header a {
+  position: relative;
+}
+
+.site-header nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -7px;
+  width: 100%;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--animation-ease);
+}
+
+.site-header nav a:hover::after,
+.site-header nav a.active::after {
+  transform: scaleX(1);
+}
+
+.home-button,
+.button,
+.btn {
+  transition:
+    transform 0.3s var(--animation-ease),
+    filter 0.3s var(--animation-ease);
+}
+
+.home-button:hover,
+.button:hover,
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.home-button span,
+.button-arrow,
+.btn-arrow {
+  display: inline-block;
+  transition: transform 0.3s var(--animation-ease);
+}
+
+.home-button:hover span,
+.button:hover .button-arrow,
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.home-property-card,
+.home-why-card,
+.home-location-card,
+.home-testimonial-card,
+.property-card,
+.project-card,
+.location-card,
+.testimonial-card,
+.why-card {
+  transition:
+    transform 0.5s var(--animation-ease),
+    box-shadow 0.5s var(--animation-ease);
+}
+
+.home-property-card:hover,
+.home-why-card:hover,
+.home-location-card:hover,
+.home-testimonial-card:hover,
+.property-card:hover,
+.project-card:hover,
+.location-card:hover,
+.testimonial-card:hover,
+.why-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 42px rgba(11, 26, 46, 0.13);
+}
+
+.home-property-image,
+.home-location-card {
+  overflow: hidden;
+}
+
+.home-property-image img,
+.home-location-card img,
+.property-card-image img,
+.project-card-image img,
+.location-card-image img {
+  transition: transform 0.5s var(--animation-ease);
+}
+
+.home-property-card:hover .home-property-image img,
+.home-location-card:hover img,
+.property-card:hover .property-card-image img,
+.project-card:hover .project-card-image img,
+.location-card:hover .location-card-image img {
+  transform: scale(1.05);
+}
+
+[data-count] {
+  font-variant-numeric: tabular-nums;
+}
+
+.mobile-menu-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--animation-ease);
+}
+
+.mobile-menu-drawer {
+  transform: translateX(100%);
+  transition: transform 0.5s var(--animation-ease);
+}
+
+.mobile-menu-open .mobile-menu-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu-open .mobile-menu-drawer {
+  transform: translateX(0);
+}
+
+.faq-answer {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    height 0.5s var(--animation-ease),
+    opacity 0.4s var(--animation-ease);
+}
+
+.faq-item.is-open .faq-answer {
+  opacity: 1;
+}
+
+.lightbox {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s var(--animation-ease);
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-content {
+  transform: scale(0.96);
+  transition: transform 0.5s var(--animation-ease);
+}
+
+.lightbox.is-open .lightbox-content {
+  transform: scale(1);
+}
+
+html.js body {
+  opacity: 0;
+  transition: opacity 0.6s var(--animation-ease);
+}
+
+html.js body.page-ready {
+  opacity: 1;
+}
+
+.scroll-to-top {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 0.4s var(--animation-ease),
+    transform 0.4s var(--animation-ease);
+}
+
+.scroll-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.form-field,
+.form-group input,
+.form-group textarea,
+.form-group select {
+  transition:
+    border-color 0.3s var(--animation-ease),
+    box-shadow 0.3s var(--animation-ease);
+}
+
+.form-field:focus,
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--gold);
+  box-shadow: none;
+  outline: none;
+}
+
+.form-success {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.5s var(--animation-ease),
+    transform 0.5s var(--animation-ease);
+}
+
+.form-success.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-animate],
+  html.js [data-stagger] > [data-animate],
+  html.js .home-hero [data-hero-animate],
+  html.js .page-banner [data-banner-title],
+  html.js body,
+  .site-header nav a::after,
+  .home-button,
+  .button,
+  .btn,
+  .home-button span,
+  .button-arrow,
+  .btn-arrow,
+  .home-property-card,
+  .home-why-card,
+  .home-location-card,
+  .home-testimonial-card,
+  .property-card,
+  .project-card,
+  .location-card,
+  .testimonial-card,
+  .why-card,
+  .home-property-image img,
+  .home-location-card img,
+  .property-card-image img,
+  .project-card-image img,
+  .location-card-image img,
+  .mobile-menu-overlay,
+  .mobile-menu-drawer,
+  .faq-answer,
+  .lightbox,
+  .lightbox-content,
+  .scroll-to-top,
+  .form-field,
+  .form-group input,
+  .form-group textarea,
+  .form-group select,
+  .form-success {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  html.js [data-animate],
+  html.js [data-animate='fade-up'],
+  html.js [data-animate='fade-left'],
+  html.js [data-animate='fade-right'],
+  html.js [data-animate='zoom-in'],
+  html.js .home-hero [data-hero-animate],
+  html.js .page-banner [data-banner-title],
+  html.js body,
+  .mobile-menu-drawer,
+  .scroll-to-top,
+  .form-success {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  html.js [data-animate='fade-up'] {
+    transform: translateY(16px);
+  }
+
+  html.js [data-animate='fade-left'] {
+    transform: translateX(16px);
+  }
+
+  html.js [data-animate='fade-right'] {
+    transform: translateX(-16px);
+  }
+
+  html.js [data-animate='zoom-in'] {
+    transform: scale(0.98);
+  }
+
+  html.js [data-animate],
+  html.js .home-hero [data-hero-animate],
+  html.js .page-banner [data-banner-title] {
+    transition-duration: 0.5s;
+  }
+
+  .home-property-card:hover,
+  .home-why-card:hover,
+  .home-location-card:hover,
+  .home-testimonial-card:hover,
+  .property-card:hover,
+  .project-card:hover,
+  .location-card:hover,
+  .testimonial-card:hover,
+  .why-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .home-property-card:hover .home-property-image img,
+  .home-location-card:hover img,
+  .property-card:hover .property-card-image img,
+  .project-card:hover .project-card-image img,
+  .location-card:hover .location-card-image img {
+    transform: scale(1.03);
+  }
+}
+@keyframes galleryFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes galleryFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes galleryCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gallery-fade-up {
+  animation: galleryFadeUp 0.7s ease-out both;
+}
+
+.gallery-fade-in {
+  animation: galleryFadeIn 0.6s ease-out both;
+}
+
+.gallery-filter {
+  transition: opacity 220ms ease;
+}
+
+.gallery-filter.is-filtering {
+  opacity: 0.4;
+}
+
+.gallery-filter.is-active {
+  opacity: 1;
+}
+
+.gallery-card {
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #e7e2d8;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(11, 26, 46, 0.06);
+  transition:
+    box-shadow 500ms ease,
+    transform 500ms ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 42px rgba(11, 26, 46, 0.12);
+}
+
+.gallery-image-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.gallery-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms ease-out;
+}
+
+.gallery-card:hover .gallery-image {
+  transform: scale(1.05);
+}
+
+.gallery-overlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 44px 20px 20px;
+  background: rgba(11, 26, 46, 0.58);
+  pointer-events: none;
+}
+
+.gallery-video-card {
+  animation: galleryCardIn 0.65s ease-out both;
+}
+
+.gallery-video-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms ease-out;
+}
+
+.gallery-video-card:hover .gallery-video-image {
+  transform: scale(1.05);
+}
+
+.gallery-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 26, 46, 0.2);
+  transition: background 300ms ease;
+}
+
+.gallery-video-card:hover .gallery-video-overlay {
+  background: rgba(11, 26, 46, 0.4);
+}
+
+.gallery-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #0b1a2e;
+  box-shadow: 0 12px 30px rgba(11, 26, 46, 0.2);
+  transform: translate(-50%, -50%);
+  transition: transform 300ms ease;
+}
+
+.gallery-video-card:hover .gallery-play-button {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.gallery-tabs {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gallery-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .gallery-overlay {
+    padding: 60px 16px 16px;
+  }
+
+  .gallery-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-fade-up,
+  .gallery-fade-in,
+  .gallery-card-in,
+  .gallery-video-card {
+    animation: none !important;
+  }
+
+  .gallery-card,
+  .gallery-image,
+  .gallery-video-image,
+  .gallery-video-overlay,
+  .gallery-play-button,
+  .gallery-filter {
+    transition: none !important;
+  }
+}
