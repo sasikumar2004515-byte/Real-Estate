@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-// Side-scrolling carousel. layout(pos, width, count) gives each item's {x, w, scale, opacity, z}.
-// Drag, swipe, trackpad, arrows and keys all move the same position.
 function useGlider({ count, layout, unit, onFrame }) {
   const stage = useRef(null)
   const items = useRef([])
@@ -16,7 +14,10 @@ function useGlider({ count, layout, unit, onFrame }) {
     const step = () => {
       const { layout: lay, count: n, onFrame: cb } = live.current
       const el = stage.current
-      if (!el) { s.raf = 0; return }
+      if (!el) {
+        s.raf = 0
+        return
+      }
       s.pos += (s.target - s.pos) * 0.1
       const settled = Math.abs(s.target - s.pos) < 0.0007
       if (settled) s.pos = s.target
@@ -31,18 +32,22 @@ function useGlider({ count, layout, unit, onFrame }) {
         node.style.zIndex = String(o.z ?? 1)
         node.style.visibility = (o.opacity ?? 1) < 0.02 ? 'hidden' : 'visible'
       }
-      if (line.current) line.current.style.transform = `scaleX(${n > 1 ? Math.max(0.06, s.pos / (n - 1)).toFixed(4) : 1})`
+      if (line.current)
+        line.current.style.transform = `scaleX(${n > 1 ? Math.max(0.06, s.pos / (n - 1)).toFixed(4) : 1})`
       if (cb) cb(s.pos)
       s.raf = settled ? 0 : requestAnimationFrame(step)
     }
     s.raf = requestAnimationFrame(step)
   }, [])
 
-  const goTo = useCallback((i) => {
-    const n = live.current.count
-    state.current.target = Math.min(n - 1, Math.max(0, Math.round(i)))
-    kick()
-  }, [kick])
+  const goTo = useCallback(
+    (i) => {
+      const n = live.current.count
+      state.current.target = Math.min(n - 1, Math.max(0, Math.round(i)))
+      kick()
+    },
+    [kick]
+  )
 
   const move = useCallback((by) => goTo(Math.round(state.current.target) + by), [goTo])
 
@@ -51,11 +56,21 @@ function useGlider({ count, layout, unit, onFrame }) {
     if (!el) return undefined
     const s = state.current
     const clampT = (v) => Math.min(live.current.count - 1, Math.max(0, v))
-    let down = false, x0 = 0, p0 = 0, moved = 0, lastX = 0, vel = 0, snap = 0
+    let down = false,
+      x0 = 0,
+      p0 = 0,
+      moved = 0,
+      lastX = 0,
+      vel = 0,
+      snap = 0
 
     const onDown = (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return
-      down = true; moved = 0; x0 = lastX = e.clientX; p0 = s.target; vel = 0
+      down = true
+      moved = 0
+      x0 = lastX = e.clientX
+      p0 = s.target
+      vel = 0
       el.classList.add('is-drag')
     }
     const onMove = (e) => {
@@ -76,7 +91,11 @@ function useGlider({ count, layout, unit, onFrame }) {
       kick()
     }
     const onClickCapture = (e) => {
-      if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0 }
+      if (moved > 6) {
+        e.preventDefault()
+        e.stopPropagation()
+        moved = 0
+      }
     }
     const onWheel = (e) => {
       if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return
@@ -84,11 +103,20 @@ function useGlider({ count, layout, unit, onFrame }) {
       s.target = clampT(s.target + e.deltaX / (live.current.unit(el.clientWidth) * 1.4))
       kick()
       clearTimeout(snap)
-      snap = setTimeout(() => { s.target = clampT(Math.round(s.target)); kick() }, 130)
+      snap = setTimeout(() => {
+        s.target = clampT(Math.round(s.target))
+        kick()
+      }, 130)
     }
     const onKey = (e) => {
-      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(Math.round(s.target) + 1) }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(Math.round(s.target) - 1) }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        goTo(Math.round(s.target) + 1)
+      }
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        goTo(Math.round(s.target) - 1)
+      }
     }
     const onResize = () => kick()
 
@@ -117,7 +145,6 @@ function useGlider({ count, layout, unit, onFrame }) {
     }
   }, [goTo, kick])
 
-  // a new set of items (filter change) starts again from the first one
   useEffect(() => {
     state.current.target = 0
     state.current.pos = 0

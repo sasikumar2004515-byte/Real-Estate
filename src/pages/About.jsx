@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { projects, locations } from '../data/site'
-
+import Process from '../components/home/Process'
+import CtaBand from '../components/CtaBand'
+import Wave from '../components/Wave'
 
 const readyHomes = projects.filter((item) => item.status === 'Ready to Move').length
 const homeTypes = new Set(projects.map((item) => item.type)).size
@@ -11,53 +13,53 @@ const stats = [
   { value: projects.length, suffix: '', label: 'Projects' },
   { value: readyHomes, suffix: '', label: 'Ready to Move' },
   { value: homeTypes, suffix: '', label: 'Home Types' },
-  { value: locations.length, suffix: '', label: 'Locations' }
+  { value: locations.length, suffix: '', label: 'Locations' },
 ]
 
 const values = [
   {
     icon: '◇',
     title: 'Quality',
-    text: 'We focus on thoughtful design, dependable materials and lasting quality.'
+    text: 'We focus on thoughtful design, dependable materials and lasting quality.',
   },
   {
     icon: '◈',
     title: 'Transparency',
-    text: 'Clear information and straightforward communication guide every interaction.'
+    text: 'Clear information and straightforward communication guide every interaction.',
   },
   {
     icon: '◎',
     title: 'Customer First',
-    text: 'Every property journey is shaped around the needs and expectations of our customers.'
+    text: 'Every property journey is shaped around the needs and expectations of our customers.',
   },
   {
     icon: '✦',
     title: 'Sustainability',
-    text: 'We encourage responsible design and better long-term living environments.'
-  }
+    text: 'We encourage responsible design and better long-term living environments.',
+  },
 ]
 
 const workSteps = [
   {
     number: '01',
     title: 'Consultation',
-    text: 'We understand your requirements, lifestyle preferences and property goals.'
+    text: 'We understand your requirements, lifestyle preferences and property goals.',
   },
   {
     number: '02',
     title: 'Site Visit',
-    text: 'Explore the property, surroundings and available amenities with our team.'
+    text: 'Explore the property, surroundings and available amenities with our team.',
   },
   {
     number: '03',
     title: 'Documentation',
-    text: 'We guide you through the relevant property information and documentation.'
+    text: 'We guide you through the relevant property information and documentation.',
   },
   {
     number: '04',
     title: 'Handover',
-    text: 'We stay connected through the final stages and help make the transition smooth.'
-  }
+    text: 'We stay connected through the final stages and help make the transition smooth.',
+  },
 ]
 
 function About() {
@@ -66,56 +68,39 @@ function About() {
       <Header />
 
       <main className="about-page">
-
-        {/* Page Banner */}
-        <section className="about-banner">
-          <img
-            src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=85"
-            alt="Modern luxury residential property"
-            width="2200"
-            height="1200"
-          />
-
-          <div className="about-banner__overlay" />
-
-          <div className="about-container about-banner__content">
-            <span className="about-eyebrow">
-              OUR STORY
-            </span>
-
-            <h1 data-animate="fade-up">
-              About Us
-            </h1>
-
-            <nav
-              className="about-breadcrumb"
-              aria-label="Breadcrumb"
-            >
-              <Link to="/">
-                Home
+        <section className="lx-hero">
+          <img src="/images/about/about-hero.webp" alt="Modern Nivora residence" />
+          <div className="lx-wrap">
+            <Wave className="lx-crumbs">
+              <Link to="/">Home</Link>
+              <span>/</span>
+              <span>About Us</span>
+            </Wave>
+            <Wave d={1}>
+              <p className="lx-kicker">Our story</p>
+            </Wave>
+            <Wave d={2} as="h1" className="lx-h1">
+              About <em>Us.</em>
+            </Wave>
+            <Wave d={3} as="p" className="lx-sub">
+              A customer-focused real estate company committed to creating meaningful property
+              experiences through quality, transparency and professional service.
+            </Wave>
+            <Wave d={4} className="lx-row">
+              <Link to="/projects" className="lx-btn">
+                Our projects <i>→</i>
               </Link>
-
-              <span aria-hidden="true">/</span>
-
-              <span>
-                About Us
-              </span>
-            </nav>
+              <Link to="/contact" className="lx-btn lx-btn--ghost">
+                Book a site visit
+              </Link>
+            </Wave>
           </div>
         </section>
 
-
-        {/* Company Introduction */}
         <section className="about-section about-intro">
           <div className="about-container about-intro__grid">
-
-            <div
-              className="about-intro__content"
-              data-animate="fade-right"
-            >
-              <span className="about-section-label">
-                WHO WE ARE
-              </span>
+            <div className="about-intro__content" data-animate="fade-right">
+              <span className="about-section-label">WHO WE ARE</span>
 
               <h2>
                 Building More Than
@@ -124,15 +109,14 @@ function About() {
               </h2>
 
               <p>
-                We are a customer-focused real estate company committed
-                to creating meaningful property experiences through
-                quality, transparency and professional service.
+                We are a customer-focused real estate company committed to creating meaningful
+                property experiences through quality, transparency and professional service.
               </p>
 
               <p>
-                From helping families find the right home to supporting
-                property decisions with clarity, we believe every
-                real estate journey deserves trust and attention to detail.
+                From helping families find the right home to supporting property decisions with
+                clarity, we believe every real estate journey deserves trust and attention to
+                detail.
               </p>
 
               <div className="about-intro__highlights">
@@ -153,15 +137,8 @@ function About() {
               </div>
             </div>
 
-
-            <div
-              className="about-intro__visual"
-              data-animate="fade-left"
-            >
-              <div
-                className="about-intro__gold-frame"
-                aria-hidden="true"
-              />
+            <div className="about-intro__visual" data-animate="fade-left">
+              <div className="about-intro__gold-frame" aria-hidden="true" />
 
               <img
                 src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"
@@ -171,19 +148,13 @@ function About() {
                 loading="lazy"
               />
             </div>
-
           </div>
         </section>
 
-
-        {/* Mission and Vision */}
         <section className="about-section about-mission">
           <div className="about-container">
-
             <div className="about-section-heading">
-              <span className="about-section-label">
-                OUR DIRECTION
-              </span>
+              <span className="about-section-label">OUR DIRECTION</span>
 
               <h2>
                 Purpose behind
@@ -193,16 +164,8 @@ function About() {
             </div>
 
             <div className="about-mission__grid">
-
-              <article
-                className="about-purpose-card"
-                data-animate="fade-up"
-                data-delay="1"
-              >
-                <div
-                  className="about-purpose-card__icon"
-                  aria-hidden="true"
-                >
+              <article className="about-purpose-card" data-animate="fade-up" data-delay="1">
+                <div className="about-purpose-card__icon" aria-hidden="true">
                   ◎
                 </div>
 
@@ -211,22 +174,13 @@ function About() {
                 <h3>Our Mission</h3>
 
                 <p>
-                  To create quality property experiences through
-                  thoughtful development, transparent communication
-                  and dependable customer support.
+                  To create quality property experiences through thoughtful development, transparent
+                  communication and dependable customer support.
                 </p>
               </article>
 
-
-              <article
-                className="about-purpose-card"
-                data-animate="fade-up"
-                data-delay="2"
-              >
-                <div
-                  className="about-purpose-card__icon"
-                  aria-hidden="true"
-                >
+              <article className="about-purpose-card" data-animate="fade-up" data-delay="2">
+                <div className="about-purpose-card__icon" aria-hidden="true">
                   ✦
                 </div>
 
@@ -235,25 +189,18 @@ function About() {
                 <h3>Our Vision</h3>
 
                 <p>
-                  To build a trusted real estate brand known for
-                  better spaces, responsible development and
-                  long-term relationships.
+                  To build a trusted real estate brand known for better spaces, responsible
+                  development and long-term relationships.
                 </p>
               </article>
-
             </div>
           </div>
         </section>
 
-
-        {/* Core Values */}
         <section className="about-section about-values">
           <div className="about-container">
-
             <div className="about-section-heading about-section-heading--center">
-              <span className="about-section-label">
-                WHAT GUIDES US
-              </span>
+              <span className="about-section-label">WHAT GUIDES US</span>
 
               <h2>
                 Our Core
@@ -262,21 +209,14 @@ function About() {
               </h2>
             </div>
 
-
-            <div
-              className="about-values__grid"
-              data-stagger
-            >
+            <div className="about-values__grid" data-stagger>
               {values.map((value) => (
                 <article
                   className="about-value-card why-card"
                   data-animate="fade-up"
                   key={value.title}
                 >
-                  <div
-                    className="about-value-card__icon"
-                    aria-hidden="true"
-                  >
+                  <div className="about-value-card__icon" aria-hidden="true">
                     {value.icon}
                   </div>
 
@@ -286,91 +226,40 @@ function About() {
                 </article>
               ))}
             </div>
-
           </div>
         </section>
 
-
-        {/* Stats */}
         <section className="about-stats">
           <div className="about-container about-stats__grid">
-
             {stats.map((stat) => (
-              <div
-                className="about-stat"
-                key={stat.label}
-              >
+              <div className="about-stat" key={stat.label}>
                 <strong>
                   <span data-count={stat.value}>0</span>
                   {stat.suffix}
                 </strong>
 
-                <span>
-                  {stat.label}
-                </span>
+                <span>{stat.label}</span>
               </div>
             ))}
-
           </div>
         </section>
 
+        <Process
+          kicker="Our process"
+          title="How we work."
+          intro="A clear and considered process helps make your property journey simpler from the first conversation to the final handover."
+          steps={workSteps.map(({ title, text }) => ({ name: title, text }))}
+        />
 
-        {/* How We Work */}
         <section className="about-section about-work">
           <div className="about-container">
-
-            <div className="about-work__heading">
-              <span className="about-section-label">
-                OUR PROCESS
-              </span>
-
-              <h2>
-                How We
-                <br />
-                <em>Work.</em>
-              </h2>
-
-              <p>
-                A clear and considered process helps make your
-                property journey simpler from the first conversation
-                to the final handover.
-              </p>
-            </div>
-
-
-            <div
-              className="about-work__steps"
-              data-stagger
-            >
-              {workSteps.map((step) => (
-                <article
-                  className="about-step-card"
-                  data-animate="fade-up"
-                  key={step.number}
-                >
-                  <span className="about-step-card__number">
-                    {step.number}
-                  </span>
-
-                  <h3>{step.title}</h3>
-
-                  <p>{step.text}</p>
-                </article>
-              ))}
-            </div>
-
-
             <div className="about-standards">
-
               <div>
-                <span className="about-section-label">
-                  QUALITY STANDARDS
-                </span>
+                <span className="about-section-label">QUALITY STANDARDS</span>
 
                 <h3>
                   Details that make
-                  <br />
-                  a difference.
+                  <br />a difference.
                 </h3>
               </div>
 
@@ -380,54 +269,18 @@ function About() {
                 <li>Clear property information</li>
                 <li>Responsive customer support</li>
               </ul>
-
-            </div>
-
-          </div>
-        </section>
-
-
-
-
-        {/* CTA */}
-        <section className="about-cta">
-          <div
-            className="about-container about-cta__inner"
-            data-animate="zoom-in"
-          >
-            <div>
-              <span className="about-section-label">
-                LET'S TALK
-              </span>
-
-              <h2>
-                Ready to find
-                <br />
-                your <em>next place?</em>
-              </h2>
-            </div>
-
-            <div className="about-cta__actions">
-              <Link
-                to="/contact"
-                className="about-button about-button--gold"
-                aria-label="Talk to us about your property requirements"
-              >
-                Talk to Us
-                <span aria-hidden="true">→</span>
-              </Link>
-
-              <Link
-                to="/projects"
-                className="about-button about-button--outline"
-                aria-label="Explore our real estate projects"
-              >
-                Explore Projects
-              </Link>
             </div>
           </div>
         </section>
 
+        <CtaBand
+          image="/images/about/about-mission.webp"
+          title="Ready to find your next place?"
+          text="Tell us about the home you have in mind and we will help you find it."
+          primary={{ label: 'Talk to us', to: '/contact' }}
+          secondary={{ label: 'Explore projects', to: '/projects' }}
+          items={['Personal site visit', 'Project walkthrough', 'Talk to the team']}
+        />
       </main>
 
       <Footer />

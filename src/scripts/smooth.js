@@ -1,6 +1,3 @@
-// Smooth wheel scrolling. The wheel moves a target and the page eases towards it.
-// Touch screens keep their normal scrolling.
-
 let started = false
 
 export function startSmoothScroll() {
@@ -8,8 +5,7 @@ export function startSmoothScroll() {
   started = true
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const touch = window.matchMedia('(pointer: coarse)').matches
-  if (reduced || touch) return
+  if (reduced) return
 
   let current = window.scrollY
   let target = current
@@ -33,7 +29,11 @@ export function startSmoothScroll() {
   }
 
   const canScrollInside = (node, dy) => {
-    for (let el = node; el && el !== document.body && el !== document.documentElement; el = el.parentElement) {
+    for (
+      let el = node;
+      el && el !== document.body && el !== document.documentElement;
+      el = el.parentElement
+    ) {
       if (el.hasAttribute && el.hasAttribute('data-native-scroll')) return true
       const style = getComputedStyle(el)
       if (/(auto|scroll)/.test(style.overflowY) && el.scrollHeight > el.clientHeight + 1) {
@@ -63,7 +63,6 @@ export function startSmoothScroll() {
     }
   }
 
-  // keys, links and scrollIntoView move the page too, so just follow them
   const onScroll = () => {
     if (Math.abs(window.scrollY - current) > 3) {
       cancelAnimationFrame(raf)
@@ -74,7 +73,9 @@ export function startSmoothScroll() {
 
   window.addEventListener('wheel', onWheel, { passive: false })
   window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', () => { target = clamp(target) })
+  window.addEventListener('resize', () => {
+    target = clamp(target)
+  })
   window.addEventListener('nx:scrollto', (e) => {
     cancelAnimationFrame(raf)
     running = false

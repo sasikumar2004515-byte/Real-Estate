@@ -1,6 +1,3 @@
-// Scroll effects used on every page: fade-up, image wipe, number count-up,
-// section tones and the progress bar.
-
 let bar = null
 let imageCheck = null
 
@@ -40,7 +37,13 @@ function countUp(el, to, prefix, suffix) {
   const step = (now) => {
     const t = Math.min(1, (now - started) / 1400)
     const value = end * (1 - Math.pow(1 - t, 3))
-    el.textContent = prefix + value.toLocaleString('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + suffix
+    el.textContent =
+      prefix +
+      value.toLocaleString('en-IN', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      }) +
+      suffix
     if (t < 1) requestAnimationFrame(step)
   }
   requestAnimationFrame(step)
@@ -52,19 +55,28 @@ export function setupMotion() {
 
   const items = []
   const pendingImages = []
-  const skip = (el) => el.hasAttribute('data-animate') || el.closest('[data-animate], [data-own]') || el.classList.contains('mv')
+  const skip = (el) =>
+    el.hasAttribute('data-animate') ||
+    el.closest('[data-animate], [data-own]') ||
+    el.classList.contains('mv')
 
-  document.querySelectorAll('main:not([data-own]) section:not(.hero):not(.focus), .nx-footer').forEach((section) => {
-    blocksOf(section).forEach((el, i) => {
-      if (skip(el)) return
-      el.classList.add('mv')
-      el.style.setProperty('--d', Math.min(i, 6) * 90 + 'ms')
-      items.push(el)
+  document
+    .querySelectorAll('main:not([data-own]) section:not(.hero):not(.focus), .rf')
+    .forEach((section) => {
+      blocksOf(section).forEach((el, i) => {
+        if (skip(el)) return
+        el.classList.add('mv')
+        el.style.setProperty('--d', Math.min(i, 6) * 90 + 'ms')
+        items.push(el)
+      })
     })
-  })
 
   document.querySelectorAll('main img').forEach((img) => {
-    if (img.closest('.hero, .focus, [data-animate], [data-own]') || img.classList.contains('mv-img')) return
+    if (
+      img.closest('.hero, .focus, [data-animate], [data-own]') ||
+      img.classList.contains('mv-img')
+    )
+      return
     img.classList.add('mv-img')
     pendingImages.push(img)
   })
@@ -80,7 +92,6 @@ export function setupMotion() {
     return
   }
 
-  // Reveal by scroll position so nothing stays hidden after a fast scroll or jump.
   const pendingBlocks = items.slice()
   const pendingCounters = counters.slice()
   const line = () => window.innerHeight * 0.93

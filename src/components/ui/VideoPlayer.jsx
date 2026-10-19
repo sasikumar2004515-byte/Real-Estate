@@ -1,135 +1,79 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  Maximize,
-  Pause,
-  Play,
-  Volume2,
-  VolumeX
-} from 'lucide-react'
+import { Maximize, Pause, Play, Volume2, VolumeX } from 'lucide-react'
 
 function formatTime(value) {
   if (!Number.isFinite(value)) {
     return '00:00'
   }
 
-  const totalSeconds =
-    Math.max(0, Math.floor(value))
+  const totalSeconds = Math.max(0, Math.floor(value))
 
-  const minutes =
-    Math.floor(
-      totalSeconds / 60
-    )
+  const minutes = Math.floor(totalSeconds / 60)
 
-  const seconds =
-    totalSeconds % 60
+  const seconds = totalSeconds % 60
 
-  return `${String(minutes).padStart(
-    2,
-    '0'
-  )}:${String(seconds).padStart(
-    2,
-    '0'
-  )}`
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-function VideoPlayer({
-  item,
-  autoPlayOnMount = false
-}) {
+function VideoPlayer({ item, autoPlayOnMount = false }) {
   const containerRef = useRef(null)
   const videoRef = useRef(null)
 
-  const [started, setStarted] =
-    useState(autoPlayOnMount)
+  const [started, setStarted] = useState(autoPlayOnMount)
 
-  const [playing, setPlaying] =
-    useState(false)
+  const [playing, setPlaying] = useState(false)
 
-  const [muted, setMuted] =
-    useState(false)
+  const [muted, setMuted] = useState(false)
 
-  const [currentTime, setCurrentTime] =
-    useState(0)
+  const [currentTime, setCurrentTime] = useState(0)
 
-  const [duration, setDuration] =
-    useState(0)
+  const [duration, setDuration] = useState(0)
 
-  const [reduceMotion, setReduceMotion] =
-    useState(false)
+  const [reduceMotion, setReduceMotion] = useState(false)
 
   useEffect(() => {
-    const motionQuery =
-      window.matchMedia(
-        '(prefers-reduced-motion: reduce)'
-      )
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
 
     const updateMotion = () => {
-      setReduceMotion(
-        motionQuery.matches
-      )
+      setReduceMotion(motionQuery.matches)
     }
 
     updateMotion()
 
-    motionQuery.addEventListener(
-      'change',
-      updateMotion
-    )
+    motionQuery.addEventListener('change', updateMotion)
 
     return () => {
-      motionQuery.removeEventListener(
-        'change',
-        updateMotion
-      )
+      motionQuery.removeEventListener('change', updateMotion)
     }
   }, [])
 
   useEffect(() => {
-    setStarted(
-      Boolean(autoPlayOnMount)
-    )
+    setStarted(Boolean(autoPlayOnMount))
 
     setPlaying(false)
     setMuted(false)
     setCurrentTime(0)
     setDuration(0)
-  }, [
-    item?.id,
-    autoPlayOnMount
-  ])
+  }, [item?.id, autoPlayOnMount])
 
   useEffect(() => {
-    if (
-      item?.type !== 'mp4' ||
-      !started
-    ) {
+    if (item?.type !== 'mp4' || !started) {
       return undefined
     }
 
-    const video =
-      videoRef.current
+    const video = videoRef.current
 
     if (!video) {
       return undefined
     }
 
-    const handleLoadedMetadata =
-      () => {
-        setDuration(
-          Number.isFinite(
-            video.duration
-          )
-            ? video.duration
-            : 0
-        )
-      }
+    const handleLoadedMetadata = () => {
+      setDuration(Number.isFinite(video.duration) ? video.duration : 0)
+    }
 
-    const handleTimeUpdate =
-      () => {
-        setCurrentTime(
-          video.currentTime || 0
-        )
-      }
+    const handleTimeUpdate = () => {
+      setCurrentTime(video.currentTime || 0)
+    }
 
     const handlePlay = () => {
       setPlaying(true)
@@ -143,79 +87,39 @@ function VideoPlayer({
       setPlaying(false)
     }
 
-    video.addEventListener(
-      'loadedmetadata',
-      handleLoadedMetadata
-    )
+    video.addEventListener('loadedmetadata', handleLoadedMetadata)
 
-    video.addEventListener(
-      'timeupdate',
-      handleTimeUpdate
-    )
+    video.addEventListener('timeupdate', handleTimeUpdate)
 
-    video.addEventListener(
-      'play',
-      handlePlay
-    )
+    video.addEventListener('play', handlePlay)
 
-    video.addEventListener(
-      'pause',
-      handlePause
-    )
+    video.addEventListener('pause', handlePause)
 
-    video.addEventListener(
-      'ended',
-      handleEnded
-    )
+    video.addEventListener('ended', handleEnded)
 
-    if (
-      video.readyState >= 1
-    ) {
+    if (video.readyState >= 1) {
       handleLoadedMetadata()
     }
 
     return () => {
-      video.removeEventListener(
-        'loadedmetadata',
-        handleLoadedMetadata
-      )
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata)
 
-      video.removeEventListener(
-        'timeupdate',
-        handleTimeUpdate
-      )
+      video.removeEventListener('timeupdate', handleTimeUpdate)
 
-      video.removeEventListener(
-        'play',
-        handlePlay
-      )
+      video.removeEventListener('play', handlePlay)
 
-      video.removeEventListener(
-        'pause',
-        handlePause
-      )
+      video.removeEventListener('pause', handlePause)
 
-      video.removeEventListener(
-        'ended',
-        handleEnded
-      )
+      video.removeEventListener('ended', handleEnded)
     }
-  }, [
-    item?.type,
-    started
-  ])
+  }, [item?.type, started])
 
   useEffect(() => {
-    if (
-      !started ||
-      item?.type !== 'mp4' ||
-      !autoPlayOnMount
-    ) {
+    if (!started || item?.type !== 'mp4' || !autoPlayOnMount) {
       return undefined
     }
 
-    const video =
-      videoRef.current
+    const video = videoRef.current
 
     if (!video) {
       return undefined
@@ -232,17 +136,16 @@ function VideoPlayer({
     play()
 
     return undefined
-  }, [
-    started,
-    item?.type,
-    item?.id,
-    autoPlayOnMount
-  ])
+  }, [started, item?.type, item?.id, autoPlayOnMount])
 
   useEffect(() => {
     const onChange = () => {
       if (!document.fullscreenElement) {
-        try { window.screen.orientation.unlock() } catch { /* ignore */ }
+        try {
+          window.screen.orientation.unlock()
+        } catch {
+          return
+        }
       }
     }
     document.addEventListener('fullscreenchange', onChange)
@@ -251,8 +154,7 @@ function VideoPlayer({
 
   useEffect(() => {
     return () => {
-      const video =
-        videoRef.current
+      const video = videoRef.current
 
       if (video) {
         video.pause()
@@ -265,40 +167,34 @@ function VideoPlayer({
   const startPlayer = async () => {
     setStarted(true)
 
-    // open full screen straight from the click, otherwise the browser blocks it
     const box = containerRef.current
     if (box && !document.fullscreenElement && box.requestFullscreen) {
-      try { await box.requestFullscreen() } catch { /* stays inline if the browser refuses */ }
-      // phones: turn the screen sideways so the film fills it
-      try { await window.screen.orientation.lock('landscape') } catch { /* not supported, fine */ }
+      await box.requestFullscreen().catch(() => null)
+
+      await window.screen.orientation?.lock?.('landscape')?.catch(() => null)
     }
 
     if (item?.type !== 'mp4') {
       return
     }
 
-    window.setTimeout(
-      async () => {
-        const video =
-          videoRef.current
+    window.setTimeout(async () => {
+      const video = videoRef.current
 
-        if (!video) {
-          return
-        }
+      if (!video) {
+        return
+      }
 
-        try {
-          await video.play()
-        } catch {
-          setPlaying(false)
-        }
-      },
-      50
-    )
+      try {
+        await video.play()
+      } catch {
+        setPlaying(false)
+      }
+    }, 50)
   }
 
   const togglePlay = async () => {
-    const video =
-      videoRef.current
+    const video = videoRef.current
 
     if (!video) {
       return
@@ -316,8 +212,7 @@ function VideoPlayer({
   }
 
   const toggleMute = () => {
-    const video =
-      videoRef.current
+    const video = videoRef.current
 
     if (!video) {
       return
@@ -328,59 +223,39 @@ function VideoPlayer({
     setMuted(video.muted)
   }
 
-  const handleProgress = (
-    event
-  ) => {
-    const video =
-      videoRef.current
+  const handleProgress = (event) => {
+    const video = videoRef.current
 
-    if (
-      !video ||
-      !duration
-    ) {
+    if (!video || !duration) {
       return
     }
 
-    const percentage =
-      Number(event.target.value)
+    const percentage = Number(event.target.value)
 
-    video.currentTime =
-      (percentage / 100) *
-      duration
+    video.currentTime = (percentage / 100) * duration
   }
 
-  const enterFullscreen =
-    async () => {
-      const container =
-        containerRef.current
+  const enterFullscreen = async () => {
+    const container = containerRef.current
 
-      if (!container) {
-        return
-      }
-
-      try {
-        if (
-          document.fullscreenElement
-        ) {
-          await document.exitFullscreen()
-          return
-        }
-
-        await container.requestFullscreen()
-      } catch {
-        return
-      }
+    if (!container) {
+      return
     }
 
-  const handleKeyDown = (
-    event
-  ) => {
-    if (
-      event.target instanceof
-        HTMLButtonElement ||
-      event.target instanceof
-        HTMLInputElement
-    ) {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen()
+        return
+      }
+
+      await container.requestFullscreen()
+    } catch {
+      return
+    }
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.target instanceof HTMLButtonElement || event.target instanceof HTMLInputElement) {
       return
     }
 
@@ -392,35 +267,24 @@ function VideoPlayer({
         return
       }
 
-      if (
-        item?.type === 'mp4'
-      ) {
+      if (item?.type === 'mp4') {
         togglePlay()
       }
 
       return
     }
 
-    if (
-      event.key.toLowerCase() ===
-      'm'
-    ) {
+    if (event.key.toLowerCase() === 'm') {
       event.preventDefault()
 
-      if (
-        started &&
-        item?.type === 'mp4'
-      ) {
+      if (started && item?.type === 'mp4') {
         toggleMute()
       }
 
       return
     }
 
-    if (
-      event.key.toLowerCase() ===
-      'f'
-    ) {
+    if (event.key.toLowerCase() === 'f') {
       event.preventDefault()
       enterFullscreen()
     }
@@ -430,18 +294,7 @@ function VideoPlayer({
     return null
   }
 
-  const progress =
-    duration > 0
-      ? Math.min(
-          100,
-          Math.max(
-            0,
-            (currentTime /
-              duration) *
-              100
-          )
-        )
-      : 0
+  const progress = duration > 0 ? Math.min(100, Math.max(0, (currentTime / duration) * 100)) : 0
 
   const youtubeSrc =
     item.type === 'youtube'
@@ -468,38 +321,27 @@ function VideoPlayer({
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-[3000ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1A2E]/95 via-[#0B1A2E]/30 to-[#0B1A2E]/10" />
+          <div className="absolute inset-0 bg-[#0B1A2E]/55" />
 
           <div className="absolute inset-0 flex items-center justify-center">
-
             <span
               aria-hidden="true"
               className="absolute h-[92px] w-[92px] rounded-full border border-[#C9A96E]/70 animate-[filmPulse_3s_ease-in-out_infinite] group-hover:[animation-play-state:paused]"
             />
 
             <span className="relative flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[#C9A96E] bg-[#0B1A2E]/35 text-white backdrop-blur-sm transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105">
-
-              <Play
-                size={25}
-                strokeWidth={1.5}
-                fill="currentColor"
-                aria-hidden="true"
-              />
-
+              <Play size={25} strokeWidth={1.5} fill="currentColor" aria-hidden="true" />
             </span>
           </div>
 
           <div className="absolute bottom-5 left-5 right-5">
-
             <p className="font-['Inter'] text-[12px] font-medium uppercase tracking-[0.08em] text-white/70">
-              Watch the film ·{' '}
-              {item.duration}
+              Watch the film · {item.duration}
             </p>
 
             <h3 className="mt-2 font-['Manrope'] text-lg font-semibold text-white sm:text-xl">
               {item.title}
             </h3>
-
           </div>
         </button>
       )}
@@ -511,7 +353,7 @@ function VideoPlayer({
             'absolute inset-0',
             reduceMotion
               ? 'opacity-100'
-              : 'animate-[videoPlayerIn_500ms_cubic-bezier(0.22,1,0.36,1)_both]'
+              : 'animate-[videoPlayerIn_500ms_cubic-bezier(0.22,1,0.36,1)_both]',
           ].join(' ')}
         >
           {item.type === 'mp4' && (
@@ -525,49 +367,29 @@ function VideoPlayer({
                 className="h-full w-full bg-[#0B1A2E] object-contain"
               />
 
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[#0B1A2E] via-[#0B1A2E]/85 to-transparent px-4 pb-4 pt-14">
-
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-[#0B1A2E]/90 px-4 pb-4 pt-6">
                 <div className="pointer-events-auto flex items-center gap-2 sm:gap-3">
-
                   <button
                     type="button"
                     onClick={togglePlay}
-                    aria-label={
-                      playing
-                        ? 'Pause video'
-                        : 'Play video'
-                    }
+                    aria-label={playing ? 'Pause video' : 'Play video'}
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-[transform,opacity] duration-300 hover:scale-105 hover:border-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A96E]"
                   >
                     {playing ? (
-                      <Pause
-                        size={15}
-                        strokeWidth={1.5}
-                        fill="currentColor"
-                        aria-hidden="true"
-                      />
+                      <Pause size={15} strokeWidth={1.5} fill="currentColor" aria-hidden="true" />
                     ) : (
-                      <Play
-                        size={15}
-                        strokeWidth={1.5}
-                        fill="currentColor"
-                        aria-hidden="true"
-                      />
+                      <Play size={15} strokeWidth={1.5} fill="currentColor" aria-hidden="true" />
                     )}
                   </button>
 
                   <div className="relative flex min-w-0 flex-1 items-center">
-
-                    <div
-                      aria-hidden="true"
-                      className="absolute left-0 right-0 h-px bg-white/20"
-                    />
+                    <div aria-hidden="true" className="absolute left-0 right-0 h-px bg-white/20" />
 
                     <div
                       aria-hidden="true"
                       className="absolute left-0 h-px bg-[#C9A96E]"
                       style={{
-                        width: `${progress}%`
+                        width: `${progress}%`,
                       }}
                     />
 
@@ -577,67 +399,38 @@ function VideoPlayer({
                       max="100"
                       step="0.1"
                       value={progress}
-                      onChange={
-                        handleProgress
-                      }
+                      onChange={handleProgress}
                       aria-label="Video progress"
                       className="relative z-10 h-4 w-full cursor-pointer appearance-none bg-transparent accent-[#C9A96E]"
                     />
-
                   </div>
 
                   <span className="hidden min-w-[82px] text-right font-['Inter'] text-[11px] font-medium tabular-nums text-white/70 sm:block">
-                    {formatTime(
-                      currentTime
-                    )}{' '}
-                    /{' '}
-                    {formatTime(
-                      duration
-                    )}
+                    {formatTime(currentTime)} / {formatTime(duration)}
                   </span>
 
                   <button
                     type="button"
                     onClick={toggleMute}
-                    aria-label={
-                      muted
-                        ? 'Unmute video'
-                        : 'Mute video'
-                    }
+                    aria-label={muted ? 'Unmute video' : 'Mute video'}
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-[transform,opacity] duration-300 hover:scale-105 hover:border-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A96E]"
                   >
                     {muted ? (
-                      <VolumeX
-                        size={16}
-                        strokeWidth={1.4}
-                        aria-hidden="true"
-                      />
+                      <VolumeX size={16} strokeWidth={1.4} aria-hidden="true" />
                     ) : (
-                      <Volume2
-                        size={16}
-                        strokeWidth={1.4}
-                        aria-hidden="true"
-                      />
+                      <Volume2 size={16} strokeWidth={1.4} aria-hidden="true" />
                     )}
                   </button>
 
                   <button
                     type="button"
-                    onClick={
-                      enterFullscreen
-                    }
+                    onClick={enterFullscreen}
                     aria-label="Enter fullscreen"
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-[transform,opacity] duration-300 hover:scale-105 hover:border-white/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A96E]"
                   >
-                    <Maximize
-                      size={16}
-                      strokeWidth={1.4}
-                      aria-hidden="true"
-                    />
+                    <Maximize size={16} strokeWidth={1.4} aria-hidden="true" />
                   </button>
-
                 </div>
-
               </div>
             </>
           )}

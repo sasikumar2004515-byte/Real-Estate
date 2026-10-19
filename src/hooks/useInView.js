@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 
-// true once the element is in view or already scrolled past.
-// Uses a scroll check instead of IntersectionObserver so fast scrolling can't leave it hidden.
 const waiting = new Set()
 let bound = false
 let queued = false

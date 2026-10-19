@@ -20,17 +20,21 @@ function Gallery() {
   const refs = useRef({})
   const filmRef = useRef(null)
 
-  // the lightbox reads full / title / category, so map them once from the chapter data
   const chapters = useMemo(
-    () => galleryChapters.map((c) => ({
-      ...c,
-      images: c.images.map((im) => ({ ...im, full: im.src, title: im.caption, category: c.title })),
-    })),
+    () =>
+      galleryChapters.map((c) => ({
+        ...c,
+        images: c.images.map((im) => ({
+          ...im,
+          full: im.src,
+          title: im.caption,
+          category: c.title,
+        })),
+      })),
     []
   )
   const photoCount = chapters.reduce((n, c) => n + c.images.length, 0)
 
-  // which chapter is under the sticky bar
   useEffect(() => {
     const ids = [...chapters.map((c) => c.id), 'film']
     let ticking = false
@@ -44,7 +48,12 @@ function Gallery() {
       })
       setActiveChapter(current)
     }
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update) } }
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(update)
+      }
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     update()
     return () => window.removeEventListener('scroll', onScroll)
@@ -54,7 +63,10 @@ function Gallery() {
     const el = id === 'film' ? filmRef.current : refs.current[id]
     if (!el) return
     const offset = (document.querySelector('.nx-header')?.offsetHeight || 84) + 56
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset + 2, behavior: 'smooth' })
+    window.scrollTo({
+      top: el.getBoundingClientRect().top + window.scrollY - offset + 2,
+      behavior: 'smooth',
+    })
   }
 
   const open = (chapterId, index) => {
@@ -79,13 +91,15 @@ function Gallery() {
     window.history.replaceState({}, '', url)
   }
 
-  // a shared link with ?photo=... opens straight to that picture
   useEffect(() => {
     const photo = new URLSearchParams(window.location.search).get('photo')
     if (!photo) return
     for (const c of chapters) {
       const i = c.images.findIndex((im) => String(im.id) === photo)
-      if (i !== -1) { setLightbox({ chapterId: c.id, index: i }); break }
+      if (i !== -1) {
+        setLightbox({ chapterId: c.id, index: i })
+        break
+      }
     }
   }, [chapters])
 
@@ -95,7 +109,10 @@ function Gallery() {
     <>
       <Helmet>
         <title>Gallery | Nivora</title>
-        <meta name="description" content="Explore the architecture, interiors, details, landscapes and locations behind the Nivora collection." />
+        <meta
+          name="description"
+          content="Explore the architecture, interiors, details, landscapes and locations behind the Nivora collection."
+        />
       </Helmet>
 
       <Header />
@@ -109,7 +126,9 @@ function Gallery() {
             key={c.id}
             chapter={c}
             index={i}
-            chapterRef={(node) => { refs.current[c.id] = node }}
+            chapterRef={(node) => {
+              refs.current[c.id] = node
+            }}
             onOpen={(imageIndex) => open(c.id, imageIndex)}
           />
         ))}

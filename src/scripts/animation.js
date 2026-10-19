@@ -1,7 +1,3 @@
-/* =========================================
-   SHARED ANIMATION SYSTEM
-   ========================================= */
-
 let revealObserver = null
 let counterObserver = null
 let scrollHandler = null
@@ -70,7 +66,7 @@ function initScrollReveal(root) {
     {
       threshold: 0.12,
       rootMargin: '0px 0px -40px 0px',
-    },
+    }
   )
 
   elements.forEach((element) => {
@@ -120,7 +116,7 @@ function observeStaggerContainer(container) {
     {
       threshold: 0.12,
       rootMargin: '0px 0px -40px 0px',
-    },
+    }
   )
 
   observer.observe(container)
@@ -187,8 +183,7 @@ function initCounters(root) {
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     counters.forEach((counter) => {
-      counter.textContent =
-        `${counter.dataset.count}${counter.dataset.suffix || ''}`
+      counter.textContent = `${counter.dataset.count}${counter.dataset.suffix || ''}`
     })
 
     return
@@ -196,8 +191,7 @@ function initCounters(root) {
 
   if (!('IntersectionObserver' in window)) {
     counters.forEach((counter) => {
-      counter.textContent =
-        `${counter.dataset.count}${counter.dataset.suffix || ''}`
+      counter.textContent = `${counter.dataset.count}${counter.dataset.suffix || ''}`
     })
 
     return
@@ -216,7 +210,7 @@ function initCounters(root) {
     },
     {
       threshold: 0.5,
-    },
+    }
   )
 
   counters.forEach((counter) => {

@@ -1,15 +1,7 @@
-/* =========================================
-   SHARED ANIMATION SYSTEM
-   ========================================= */
-
 :root {
   --animation-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --animation-duration: 0.6s;
 }
-
-/* -----------------------------------------
-   Scroll reveal
-   ----------------------------------------- */
 
 html.js [data-animate] {
   opacity: 0;
@@ -18,23 +10,23 @@ html.js [data-animate] {
     transform var(--animation-duration) var(--animation-ease);
 }
 
-html.js [data-animate="fade-up"] {
+html.js [data-animate='fade-up'] {
   transform: translateY(24px);
 }
 
-html.js [data-animate="fade-in"] {
+html.js [data-animate='fade-in'] {
   transform: none;
 }
 
-html.js [data-animate="fade-left"] {
+html.js [data-animate='fade-left'] {
   transform: translateX(24px);
 }
 
-html.js [data-animate="fade-right"] {
+html.js [data-animate='fade-right'] {
   transform: translateX(-24px);
 }
 
-html.js [data-animate="zoom-in"] {
+html.js [data-animate='zoom-in'] {
   transform: scale(0.96);
 }
 
@@ -43,33 +35,25 @@ html.js [data-animate].is-visible {
   transform: none;
 }
 
-/* -----------------------------------------
-   Manual delay
-   ----------------------------------------- */
-
-html.js [data-delay="1"] {
+html.js [data-delay='1'] {
   transition-delay: 0.1s;
 }
 
-html.js [data-delay="2"] {
+html.js [data-delay='2'] {
   transition-delay: 0.2s;
 }
 
-html.js [data-delay="3"] {
+html.js [data-delay='3'] {
   transition-delay: 0.3s;
 }
 
-html.js [data-delay="4"] {
+html.js [data-delay='4'] {
   transition-delay: 0.4s;
 }
 
-html.js [data-delay="5"] {
+html.js [data-delay='5'] {
   transition-delay: 0.5s;
 }
-
-/* -----------------------------------------
-   Stagger
-   ----------------------------------------- */
 
 html.js [data-stagger] > [data-animate] {
   transition-delay: 0s;
@@ -102,10 +86,6 @@ html.js [data-stagger].is-visible > [data-animate]:nth-child(6) {
 html.js [data-stagger].is-visible > [data-animate]:nth-child(n + 7) {
   transition-delay: 0.7s;
 }
-
-/* -----------------------------------------
-   Hero
-   ----------------------------------------- */
 
 .home-hero,
 .hero {
@@ -145,21 +125,17 @@ html.js .home-hero [data-hero-animate] {
   transform: none;
 }
 
-.home-hero.is-loaded [data-hero-animate="2"] {
+.home-hero.is-loaded [data-hero-animate='2'] {
   transition-delay: 0.1s;
 }
 
-.home-hero.is-loaded [data-hero-animate="3"] {
+.home-hero.is-loaded [data-hero-animate='3'] {
   transition-delay: 0.2s;
 }
 
-.home-hero.is-loaded [data-hero-animate="4"] {
+.home-hero.is-loaded [data-hero-animate='4'] {
   transition-delay: 0.3s;
 }
-
-/* -----------------------------------------
-   Page banner
-   ----------------------------------------- */
 
 html.js .page-banner [data-banner-title] {
   opacity: 0;
@@ -173,10 +149,6 @@ html.js .page-banner [data-banner-title] {
   opacity: 1;
   transform: none;
 }
-
-/* -----------------------------------------
-   Navigation
-   ----------------------------------------- */
 
 .site-header a {
   position: relative;
@@ -199,10 +171,6 @@ html.js .page-banner [data-banner-title] {
 .site-header nav a.active::after {
   transform: scaleX(1);
 }
-
-/* -----------------------------------------
-   Buttons
-   ----------------------------------------- */
 
 .home-button,
 .button,
@@ -232,10 +200,6 @@ html.js .page-banner [data-banner-title] {
   transform: translateX(4px);
 }
 
-/* -----------------------------------------
-   Cards
-   ----------------------------------------- */
-
 .home-property-card,
 .home-why-card,
 .home-location-card,
@@ -263,10 +227,6 @@ html.js .page-banner [data-banner-title] {
   box-shadow: 0 18px 42px rgba(11, 26, 46, 0.13);
 }
 
-/* -----------------------------------------
-   Card images
-   ----------------------------------------- */
-
 .home-property-image,
 .home-location-card {
   overflow: hidden;
@@ -288,17 +248,9 @@ html.js .page-banner [data-banner-title] {
   transform: scale(1.05);
 }
 
-/* -----------------------------------------
-   Counters
-   ----------------------------------------- */
-
 [data-count] {
   font-variant-numeric: tabular-nums;
 }
-
-/* -----------------------------------------
-   Mobile menu
-   ----------------------------------------- */
 
 .mobile-menu-overlay {
   opacity: 0;
@@ -320,10 +272,6 @@ html.js .page-banner [data-banner-title] {
   transform: translateX(0);
 }
 
-/* -----------------------------------------
-   FAQ accordion
-   ----------------------------------------- */
-
 .faq-answer {
   height: 0;
   overflow: hidden;
@@ -336,10 +284,6 @@ html.js .page-banner [data-banner-title] {
 .faq-item.is-open .faq-answer {
   opacity: 1;
 }
-
-/* -----------------------------------------
-   Gallery lightbox
-   ----------------------------------------- */
 
 .lightbox {
   opacity: 0;
@@ -361,10 +305,6 @@ html.js .page-banner [data-banner-title] {
   transform: scale(1);
 }
 
-/* -----------------------------------------
-   Page load
-   ----------------------------------------- */
-
 html.js body {
   opacity: 0;
   transition: opacity 0.6s var(--animation-ease);
@@ -373,10 +313,6 @@ html.js body {
 html.js body.page-ready {
   opacity: 1;
 }
-
-/* -----------------------------------------
-   Scroll to top
-   ----------------------------------------- */
 
 .scroll-to-top {
   opacity: 0;
@@ -393,10 +329,6 @@ html.js body.page-ready {
   transform: none;
 }
 
-/* -----------------------------------------
-   Form
-   ----------------------------------------- */
-
 .form-field,
 .form-group input,
 .form-group textarea,
@@ -411,7 +343,7 @@ html.js body.page-ready {
 .form-group textarea:focus,
 .form-group select:focus {
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.12);
+  box-shadow: none;
   outline: none;
 }
 
@@ -427,10 +359,6 @@ html.js body.page-ready {
   opacity: 1;
   transform: none;
 }
-
-/* -----------------------------------------
-   Reduced motion
-   ----------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
   html.js [data-animate],
@@ -475,10 +403,10 @@ html.js body.page-ready {
   }
 
   html.js [data-animate],
-  html.js [data-animate="fade-up"],
-  html.js [data-animate="fade-left"],
-  html.js [data-animate="fade-right"],
-  html.js [data-animate="zoom-in"],
+  html.js [data-animate='fade-up'],
+  html.js [data-animate='fade-left'],
+  html.js [data-animate='fade-right'],
+  html.js [data-animate='zoom-in'],
   html.js .home-hero [data-hero-animate],
   html.js .page-banner [data-banner-title],
   html.js body,
@@ -490,24 +418,20 @@ html.js body.page-ready {
   }
 }
 
-/* -----------------------------------------
-   Mobile
-   ----------------------------------------- */
-
 @media (max-width: 768px) {
-  html.js [data-animate="fade-up"] {
+  html.js [data-animate='fade-up'] {
     transform: translateY(16px);
   }
 
-  html.js [data-animate="fade-left"] {
+  html.js [data-animate='fade-left'] {
     transform: translateX(16px);
   }
 
-  html.js [data-animate="fade-right"] {
+  html.js [data-animate='fade-right'] {
     transform: translateX(-16px);
   }
 
-  html.js [data-animate="zoom-in"] {
+  html.js [data-animate='zoom-in'] {
     transform: scale(0.98);
   }
 
@@ -594,9 +518,9 @@ html.js body.page-ready {
 .gallery-card {
   overflow: hidden;
   position: relative;
-  border: 1px solid #E7E2D8;
+  border: 1px solid #e7e2d8;
   border-radius: 16px;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0 10px 30px rgba(11, 26, 46, 0.06);
   transition:
     box-shadow 500ms ease,
@@ -632,13 +556,7 @@ html.js body.page-ready {
   bottom: 0;
   left: 0;
   padding: 44px 20px 20px;
-  background:
-    linear-gradient(
-      to top,
-      rgba(11, 26, 46, 0.95) 0%,
-      rgba(11, 26, 46, 0.65) 42%,
-      rgba(11, 26, 46, 0) 100%
-    );
+  background: rgba(11, 26, 46, 0.58);
   pointer-events: none;
 }
 
@@ -679,9 +597,9 @@ html.js body.page-ready {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: #FFFFFF;
-  color: #0B1A2E;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  color: #0b1a2e;
+  box-shadow: 0 12px 30px rgba(11, 26, 46, 0.2);
   transform: translate(-50%, -50%);
   transition: transform 300ms ease;
 }

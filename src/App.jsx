@@ -11,6 +11,7 @@ import Gallery from './pages/Gallery'
 import Locations from './pages/Locations'
 import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
+import NotFound from './pages/NotFound'
 import FloatingActions from './components/FloatingActions'
 
 function ScrollToTop() {
@@ -50,52 +51,25 @@ function AppRoutes() {
       <FloatingActions />
 
       <div key={pathname} className="page-fade">
-      <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-        <Route
-          path="/about"
-          element={<About />}
-        />
+          <Route path="/about" element={<About />} />
 
-        <Route
-          path="/projects"
-          element={<Projects />}
-        />
+          <Route path="/projects" element={<Projects />} />
 
-        <Route
-          path="/projects/:id"
-          element={<ProjectShowcase />}
-        />
+          <Route path="/projects/:id" element={<ProjectShowcase />} />
 
-        <Route
-          path="/gallery"
-          element={<Gallery />}
-        />
+          <Route path="/gallery" element={<Gallery />} />
 
-        <Route
-          path="/locations"
-          element={<Locations />}
-        />
+          <Route path="/locations" element={<Locations />} />
 
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
+          <Route path="/contact" element={<Contact />} />
 
-        <Route
-          path="/faq"
-          element={<FAQ />}
-        />
+          <Route path="/faq" element={<FAQ />} />
 
-        <Route
-          path="*"
-          element={<Home />}
-        />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </div>
     </>
   )
